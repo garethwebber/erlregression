@@ -12,7 +12,7 @@ all: compile run
 compile: ${MODS:%=%.beam} 
 
 run:
-	${ERL} -s fac main 5
+	${ERL} -s fac main
 
 clean:
 	rm -rf *.beam erl_crash.dump

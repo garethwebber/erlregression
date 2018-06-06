@@ -1,8 +1,7 @@
 -module(fac).
--export([main/1]).
+-export([main/0]).
 
-% Handle command line arguments
-main([A]) ->
+main() ->
   lists:map(fun printFac/1,
             facfile:loadFile("fac.dat")),
   init:stop().
