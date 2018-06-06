@@ -3,10 +3,13 @@
 
 % Handle command line arguments
 main([A]) ->
-  I = list_to_integer(atom_to_list(A)),
-  F = fac(I),
-  io:format("factorial of ~w is ~w~n", [I, F]),
+  lists:map(fun printFac/1,
+            facfile:loadFile("fac.dat")),
   init:stop().
+
+printFac(Number) ->
+  F = fac(Number),
+  io:format("factorial of ~w is ~w~n", [Number, F]).
 
 % The actual business logic
 fac(0) -> 1;

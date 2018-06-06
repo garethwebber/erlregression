@@ -7,21 +7,23 @@
 
 loadFile(FileName) ->
   {ok, FileHandle} = file:open(FileName, [read]),
-  try readLines(FileHandle)
+  try readContents(FileHandle)
     after file:close(FileHandle)
   end.
   
-readLines(FileHandle) ->
-  case file:read_line(FileHandle) of
-    {ok, Line} ->
+readContents(FileIO) ->
+  case io:get_line(FileIO, '') of
+    eof -> [];
+    {error, Reason} ->
+       io:format("File error: ~p~n", [Reason]),
+       [];
+    Line ->
+      io:format("Read: ~s~n", [Line]),
       Text = string:trim(Line),
       {Value, Rest} = string:to_integer(Text), 
-      [Value | readLines(fileHandle)];
-    eof -> [];
-    {error, Reason} -> 
-       io:format("File error: ~p~n", [Reason]),
-       []
+      [Value | readContents(fileIO)] 
   end.
+
 
 test() ->
   loadFile("/Users/me/Development/erlregression/fac.dat").
