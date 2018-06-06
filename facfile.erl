@@ -10,18 +10,18 @@ loadFile(FileName) ->
   try readContents(FileHandle)
     after file:close(FileHandle)
   end.
-  
+
 readContents(FileIO) ->
-  case io:get_line(FileIO, '') of
-    eof -> [];
+  case io:get_line(FileIO, "") of
+    eof -> 
+       [];
     {error, Reason} ->
        io:format("File error: ~p~n", [Reason]),
        [];
     Line ->
-      io:format("Read: ~s~n", [Line]),
       Text = string:trim(Line),
-      {Value, Rest} = string:to_integer(Text), 
-      [Value | readContents(fileIO)] 
+      {Value, _} = string:to_integer(Text), 
+      [Value | readContents(FileIO)] 
   end.
 
 
