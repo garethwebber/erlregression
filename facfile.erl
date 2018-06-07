@@ -1,4 +1,4 @@
--module(facfile).
+-module(pointfile).
 -export([loadFile/1,test/0]).
 
 % Read content of file passed to loadList, 
@@ -26,4 +26,4 @@ readContents(FileIO) ->
 
 
 test() ->
-  loadFile("/Users/me/Development/erlregression/fac.dat").
+  loadFile("/Users/me/Development/erlregression/points.dat").

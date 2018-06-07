@@ -5,7 +5,7 @@
 
 ERL = erl -boot start_clean -noshell
 
-MODS = fac facfile
+MODS = fac pointfile
 
 all: compile run
 
