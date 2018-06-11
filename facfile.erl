@@ -1,4 +1,4 @@
--module(pointfile).
+-module(facfile).
 -export([loadFile/1,test/0]).
 
 % Read content of file passed to loadList, 
