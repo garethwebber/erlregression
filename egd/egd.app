@@ -1,0 +1,10 @@
+{application,egd,
+             [{description,"Erlang Graphics Draw"},
+              {vsn,"0.10.0"},
+              {registered,[]},
+              {applications,[kernel,stdlib]},
+              {env,[]},
+              {modules,[egd,egd_font,egd_png,egd_primitives,egd_render]},
+              {maintainers,[]},
+              {licenses,[]},
+              {links,[]}]}.
