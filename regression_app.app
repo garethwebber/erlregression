@@ -1,9 +1,9 @@
-{application, fac_app,
+{application, regression_app,
  [{description, "Linear Regression Application"},
   {vsn, "1"},
-  {modules, [fac_app]},
-  {registered, []},
+  {modules, [regression_app,regression_math,regression_graph]},
+  {registered, [regression_app]},
   {applications, [kernel, stdlib]},
   {included_applications, [egd]},
-  {mod, {fac_app,[]}}
+  {mod, {regression_app,[]}}
  ]}.

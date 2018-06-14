@@ -5,20 +5,22 @@
 
 ERL = erl -boot start_clean -pa egd -noshell 
 
-MODS = fac_app
+MODS = regression_app regression_math regression_graph
 
 all: compile run
 
 compile: ${MODS:%=%.beam} 
 
+# In shell (erl -pa egd) call:
+#  application:start(regression_app).
+#  whereis(regression_app) ! {self(), "runregression"}.
 run:
-	${ERL} -eval "fac_app:run_regression()"
- 	# In shell (erl -pa egd) call:  
-        #  application:start(fac_app).
-        #  whereis(regression) ! {self(), "runregression"}.
+	${ERL} -eval "regression_math:run_regression(),init:stop()"
+	${ERL} -eval "regression_graph:create_graph(),init:stop()"
+	ls *png
 
 clean:
-	rm -rf *.beam erl_crash.dump
+	rm -rf *.png *.beam erl_crash.dump
 
 .DEFAULT:
     @$(ECHO) "Unknown target $@, try:  make help"
