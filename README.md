@@ -2,10 +2,13 @@
 
 This is a test of my ability to learn erlang. The plan is to build a simple web app that can pass in a series of points and get a linear regression performed.
 
-The application is built with rebar3. To run, execute `rebar3 shell` which will grab egd as a dependency and compile everything. In the shell type:
+The application is built with rebar3. 
+
+To compile, execute `rebar3 compile` in the shell which will grab egd as a dependency and compile everything. 
+
+To run, execute `rebar3 shell` which willi start erland and load the regressio_app. To see shomething enter: 
 
 ```erlang
-  application:start(regression_app).
   whereis(regression_app) ! {self(), "runregression"}.
 ```
 
