@@ -1,7 +1,7 @@
 {application, regression_app,
  [{description, "Linear Regression Application"},
   {vsn, "1"},
-  {modules, [regression_app,regression_math,regression_graph]},
+  {modules, [regression_app,regression_file,regression_math,regression_graph]},
   {registered, [regression_app]},
   {applications, [kernel, stdlib]},
   {included_applications, [egd]},

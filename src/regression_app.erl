@@ -14,7 +14,7 @@ loop() ->
   receive
     {Pid, "runregression"} ->
        Pid ! {self(), ok},
-       regression_math:run_regression(),
+       regression_file:run_regression("points.dat"),
        regression_graph:create_graph(),
        loop();
     stop ->
