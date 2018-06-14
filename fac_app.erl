@@ -1,12 +1,47 @@
--module(fac).
--export([main/0]).
+-module(fac_app).
+-behaviour(application).
+-export([start/2, stop/1, run_regression/0]).
 
-main() ->
+start(_Type, _Args) ->
+    Pid = spawn_link(fun loop/0),
+    register(regression, Pid),
+    {ok, Pid}.
+
+stop(_State) ->
+    ok.
+
+loop() ->
+  receive
+    {Pid, "runregression"} ->
+       Pid ! {self(), ok},
+       run_regression(),
+       loop();
+    stop ->
+       true
+  end.
+
+run_regression() ->
   {ok, Terms} = file:consult("points.dat"),
   lists:map(fun printPoint/1, Terms),
   {regression, A, B} = regression(Terms),
   io:format("A=~w B=~w ~n", [A, B]),
+%  createGraph(),
   init:stop().
+
+createGraph() ->
+  Im = egd:create(600, 600),
+  drawAxes(Im, 600), 
+  Bin = egd:render(Im),
+  egd:save(Bin, "output.png").
+
+drawAxes(Image, Size) ->
+  Margin = 20,
+  OMargin = Size - Margin,
+  Black = egd:color({0,0,0}),
+
+  egd:line(Image, {Margin, OMargin}, {Margin,  Margin}, Black),
+  egd:line(Image, {Margin, OMargin}, {OMargin, OMargin}, Black),
+  Image.
 
 printPoint({point,PX,PY}) ->
   io:format("(~w, ~w)~n", [PX, PY]).
