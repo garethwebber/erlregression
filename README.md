@@ -11,9 +11,9 @@ The application is built with rebar3. To run, execute `rebar3 shell` which will 
 
 # Journey
 
-Done. Get a working erlang build system using a simple factorial app
-Done. Read a file of points, one point per line, comma seperated to load
-Done. Perform a regression and output the details 
++ Done. Get a working erlang build system using a simple factorial app
++ Done. Read a file of points, one point per line, comma seperated to load
++ Done. Perform a regression and output the details 
 4. Produce a PNG graph of the points and the line
 5. Make it work with a JSON payload and response
 6. Make it a web service
