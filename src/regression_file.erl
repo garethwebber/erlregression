@@ -16,9 +16,9 @@ run_regression(Filename) ->
     end,
 
   {ok, Terms} = file:consult(filename:join([PrivDir, Filename])),
-  lists:map(fun printPoint/1, Terms),
+  %lists:map(fun printPoint/1, Terms),
   {regression, A, B} = regression_math:regression(Terms),
-  io:format("A=~w B=~w ~n", [A, B]).
+  {Terms, A, B}.
 
 printPoint({point,PX,PY}) ->
   io:format("(~w, ~w)~n", [PX, PY]).
