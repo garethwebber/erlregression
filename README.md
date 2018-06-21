@@ -6,7 +6,7 @@ The application is built with rebar3.
 
 To compile, execute `rebar3 compile` in the shell which will grab egd as a dependency and compile everything. 
 
-To run, execute `rebar3 shell` which willi start erland and load the regressio_app. To see shomething enter: 
+To run, execute `rebar3 shell` which will start erlang and load the regressio_app. To see something enter: 
 
 ```erlang
   whereis(regression_app) ! {self(), "runregression"}.
@@ -21,3 +21,10 @@ To run, execute `rebar3 shell` which willi start erland and load the regressio_a
 5. Make it work with a JSON payload and response
 6. Make it a web service
 7. Build a one page app to send the points and receive the response
+
+# Output
+
+The currect regression graph looks like:
+
+![alt text](https://raw.githubusercontent.com/garethwebber/erlregression/master/priv/v1_graph.png "Regression Graph")
+
