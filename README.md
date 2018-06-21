@@ -17,10 +17,13 @@ To run, execute `rebar3 shell` which will start erlang and load the regression_a
 + Done. Get a working erlang build system using a simple factorial app
 + Done. Read a file of points, one point per line, comma seperated to load
 + Done. Perform a regression and output the details 
-4. Produce a PNG graph of the points and the line
-5. Make it work with a JSON payload and response
-6. Make it a web service
-7. Build a one page app to send the points and receive the response
++ Done. Produce a PNG graph of the points and the line
+5. Use ETS to store points in DB, taking initial load from file. 
+6. Create three new message types: Add single point to DB; add multiple points to DB and add points from file to DB (stopping initial load).  
+7. Create a REST endpoint that runs regression and returns graph
+8. Create REST endpoints that allows points to be added
+9. Improve graph with ticks and other labelling.
+10. Build a one page app to send the points and receive the response
 
 # Output
 
