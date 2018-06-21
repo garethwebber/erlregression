@@ -3,9 +3,24 @@
 -export([start/2, stop/1]).
 
 start(_Type, _Args) ->
+    % Spin up the points database
     DB = regression_db:start(),
+
+    % Spin up the App Server
     Pid = spawn_link(fun() -> loop(DB) end),
     register(regression_app, Pid),
+
+    % Spin up the Web Server
+    Dispatch = cowboy_router:compile([
+	{'_', [
+		{"/", regression_web_handler, []}
+	]}
+    ]),
+    {ok, _} = cowboy:start_clear(http, [{port, 8080}], #{
+         env => #{dispatch => Dispatch}
+    }),
+    gen_server:start_link({local, ?MODULE}, ?MODULE, [], []),
+
     {ok, Pid}.
 
 stop(_State) ->
