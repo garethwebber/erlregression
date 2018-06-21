@@ -26,6 +26,7 @@ whereis(regression_app) ! {self(), "debug"}.
 + Done. Produce a PNG graph of the points and the line
 + Done. Use ETS to store points in DB, taking initial load from file. 
 + Done. Create three new message types: Add single point to DB; add multiple points to DB and add points from file to DB (stopping initial load).  
+7. Get turbo webserver running serving static content
 8. Create a REST endpoint that runs regression and returns graph
 9. Create REST endpoints that allows points to be added
 10. Place some protection around running regession without enough points.
