@@ -15,7 +15,7 @@ loop() ->
     {Pid, "runregression"} ->
        Pid ! {self(), ok},
        {Terms, A, B} = regression_file:run_regression("points.dat"),
-       regression_graph:create_graph(Terms),
+       regression_graph:create_graph(Terms, A, B),
        loop();
     stop ->
        true

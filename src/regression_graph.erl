@@ -1,7 +1,7 @@
 -module(regression_graph).
--export([create_graph/1]).
+-export([create_graph/3]).
 
-create_graph(Points) ->
+create_graph(Points, A, B) ->
   Size = 600,
   Margin = 20,
 
@@ -10,6 +10,7 @@ create_graph(Points) ->
   MaxMin = get_max_min(Points),
   draw_axes(Im, Size, Margin, MaxMin), 
   lists:foreach(fun(H) -> plot_point(Im, Size, Margin, MaxMin, H) end, Points),
+  plot_line(Im, Size, Margin, MaxMin, A, B),
 
   Bin = egd:render(Im),
   egd:save(Bin, "output.png"),
@@ -35,6 +36,17 @@ plot_point(Image, Size, Margin, MaxMin, Point) ->
   egd:line(Image, {CentreX - 5, CentreY + 5}, {CentreX +5, CentreY -5}, Blue),
   %io:format("Point (~w, ~w)~n", [CentreX, CentreY]),
   Image.
+
+plot_line(Image, Size, Margin, MaxMin, A, B) ->
+	Red = egd:color({255,0,0}),
+  	{MinX, _, MaxX, _} = MaxMin,
+
+	Left =  {point, MinX, A + (B * MinX)},
+        Right =	{point, MaxX, A + (B * MaxX)},
+
+	egd:line(Image, translate_point(MaxMin, Size, Margin, Left),
+		        translate_point(MaxMin, Size, Margin, Right), Red),
+	Image.
 
 get_max_min(Points) ->
    get_max_min_ac(0, 0, 0, 0, Points).
