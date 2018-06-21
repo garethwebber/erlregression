@@ -9,7 +9,13 @@ To compile, execute `rebar3 compile` in the shell which will grab egd as a depen
 To run, execute `rebar3 shell` which will start erlang and load the regression_app. To see something enter: 
 
 ```erlang
-  whereis(regression_app) ! {self(), "runregression"}.
+whereis(regression_app) ! {self(), "loadfile", "points.dat"}.
+whereis(regression_app) ! {self(), "runregression"}.         
+
+whereis(regression_app) ! {self(), "loadpoint", {point, -1, 20}}.
+whereis(regression_app) ! {self(), "runregression"}.             
+
+whereis(regression_app) ! {self(), "debug"}.        
 ```
 
 # Journey

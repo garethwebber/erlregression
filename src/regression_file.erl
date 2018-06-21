@@ -1,7 +1,7 @@
 -module(regression_file).
--export([run_regression/1]).
+-export([load_file_points/1]).
 
-run_regression(Filename) ->
+load_file_points(Filename) ->
   case code:priv_dir(my_application) of
         {error, bad_name} ->
             % This occurs when not running as a release; e.g., erl -pa ebin
@@ -16,12 +16,7 @@ run_regression(Filename) ->
     end,
 
   {ok, Terms} = file:consult(filename:join([PrivDir, Filename])),
-  %lists:map(fun printPoint/1, Terms),
-  {regression, A, B} = regression_math:regression(Terms),
-  {Terms, A, B}.
-
-printPoint({point,PX,PY}) ->
-  io:format("(~w, ~w)~n", [PX, PY]).
+  Terms.
 
 % Read content of file passed to loadList, 
 % reading an integer per line 
