@@ -38,7 +38,7 @@ plot_point(Image, Size, Margin, MaxMin, Point) ->
 
 get_max_min() ->
    % return a hard-code grid for now
-   {-5, 0, 5, 25}.
+   {-5, -5, 5, 25}.
 
 translate_point(MaxMin, Size, Margin, Point) ->
   {MinX, MinY, MaxX, MaxY} = MaxMin,
