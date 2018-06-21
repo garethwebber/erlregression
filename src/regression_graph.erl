@@ -7,7 +7,7 @@ create_graph(Points) ->
 
   Im = egd:create(Size, Size),
   
-  MaxMin = get_max_min(),
+  MaxMin = get_max_min(Points),
   draw_axes(Im, Size, Margin, MaxMin), 
   lists:foreach(fun(H) -> plot_point(Im, Size, Margin, MaxMin, H) end, Points),
 
@@ -36,9 +36,16 @@ plot_point(Image, Size, Margin, MaxMin, Point) ->
   %io:format("Point (~w, ~w)~n", [CentreX, CentreY]),
   Image.
 
-get_max_min() ->
-   % return a hard-code grid for now
-   {-5, -5, 5, 25}.
+get_max_min(Points) ->
+   get_max_min_ac(0, 0, 0, 0, Points).
+
+get_max_min_ac(MinX, MinY, MaxX, MaxY, []) ->
+	{MinX, MinY, MaxX, MaxY};
+
+get_max_min_ac(MinX, MinY, MaxX, MaxY, Points) ->
+	[H|T] = Points,
+	{point, X, Y} = H,
+	get_max_min_ac(min(X, MinX), min(Y, MinY), max(X, MaxX), max(Y, MaxY), T).
 
 translate_point(MaxMin, Size, Margin, Point) ->
   {MinX, MinY, MaxX, MaxY} = MaxMin,
