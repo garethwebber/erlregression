@@ -18,6 +18,11 @@ loop(DB) ->
         Pid ! {self(), ok},
         loop(DB);
 
+    {Pid, "loadlist", List} ->
+        regression_db:insert_list(DB, List),
+        Pid ! {self(), ok},
+        loop(DB);
+
     {Pid, "loadfile", File} ->
         Terms = regression_file:load_file_points(File),
         regression_db:insert_list(DB, Terms),
