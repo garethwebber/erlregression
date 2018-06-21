@@ -1,12 +1,12 @@
 # ErlRegression
 
-This is a test of my ability to learn erlang. The plan is to build a simple web app that can pass in a series of points and get a linear regression performed.
+This is a test of my ability to learn erlang. The plan is to build a simple web app that you can give a series of points and get a linear regression performed.
 
 The application is built with rebar3. 
 
 To compile, execute `rebar3 compile` in the shell which will grab egd as a dependency and compile everything. 
 
-To run, execute `rebar3 shell` which will start erlang and load the regressio_app. To see something enter: 
+To run, execute `rebar3 shell` which will start erlang and load the regression_app. To see something enter: 
 
 ```erlang
   whereis(regression_app) ! {self(), "runregression"}.
@@ -24,7 +24,7 @@ To run, execute `rebar3 shell` which will start erlang and load the regressio_ap
 
 # Output
 
-The currect regression graph looks like:
+The current regression graph looks like:
 
 ![alt text](https://raw.githubusercontent.com/garethwebber/erlregression/master/priv/v1_graph.png "Regression Graph")
 
