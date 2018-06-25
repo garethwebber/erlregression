@@ -52,8 +52,8 @@ loop(DB) ->
 	loop(DB);
 
     {Pid, "debug"} ->
-        regression_db:debug(DB),
-	Pid ! {self(), ok},
+	Return = regression_db:debug(DB),
+	Pid ! {self(), Return},
 	loop(DB);
 	  
     stop ->

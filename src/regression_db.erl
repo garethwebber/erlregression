@@ -20,16 +20,20 @@ get_all(DB) ->
 	ets:tab2list(DB).
 
 debug(DB) ->
-	io:format("Database contains: ~n~n"),
-        print_list(get_all(DB)).
+	"Database contains: ~n~n" ++  debug_h(DB, get_all(DB)).
 
-print_list([]) ->
-        true;
+debug_h(DB, []) ->
+	"";
 
-print_list(List) ->
+debug_h(DB, List) -> 
 	[H|T] = List,
-	print_point(H),
-	print_list(T).
+	{point, PX, PY} = H,
+        "(" ++ list_encode(PX) ++ ", " ++ list_encode(PY) ++ ")~n" ++ debug_h(DB, T).	
 
-print_point({point,PX,PY}) ->
-  io:format("(~w, ~w)~n", [PX, PY]).
+list_encode(Value) ->
+	case Value of
+		A when is_integer(A) ->
+			integer_to_list(A);
+		A when is_float(A) ->
+			float_to_list(A)
+	end.
