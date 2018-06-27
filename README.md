@@ -18,7 +18,7 @@ whereis(regression_app) ! {self(), "runregression"}.
 whereis(regression_app) ! {self(), "debug"}.        
 ```
 
-There is also a static hello world webserver running on `http://localhost:8080`.
+Alternatively, you can spin up a web-browser and point it at `http://localhost:8080` and see the debug contents of the database as JSON.
 
 # Journey
 

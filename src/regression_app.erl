@@ -44,6 +44,11 @@ loop(DB) ->
 	Pid ! {self(), ok},
 	loop(DB);
 
+
+    {Pid, "getpoints"} ->
+	Pid ! {self(), regression_db:get_all(DB)},
+	loop(DB);
+
     {Pid, "runregression"} ->
         Terms = regression_db:get_all(DB),
 	{regression, A, B} = regression_math:regression(Terms),
