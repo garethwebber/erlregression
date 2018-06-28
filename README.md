@@ -30,7 +30,7 @@ Alternatively, you can spin up a web-browser and point it at `http://localhost:8
 + Done. Create three new message types: Add single point to DB; add multiple points to DB and add points from file to DB (stopping initial load).  
 + Done. Get cowboy webserver running serving static content
 8. Create a REST endpoint that runs regression and returns graph
-9. Create REST endpoints that allows points to be added
++ Done. Create REST endpoints that allows points to be added
 10. Place some protection around running regession without enough points.
 11. Improve graph with ticks and other labelling.
 12. Build a one page app to send the points and receive the response

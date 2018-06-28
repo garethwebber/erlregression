@@ -33,6 +33,7 @@ index(Req0, Opts) ->
 <BODY>
      <H1>Regression Web App</H1>
      <P>Click here to see <a href=/rest/debug>database debug</a> content.
+     <p>Click here to <a href=/rest/addpoint?x=2&y=6> to the database</a>.
 </BODY>	 
 </HTML>">>, Req0),
 	{ok, Req, Opts}.

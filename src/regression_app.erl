@@ -13,7 +13,7 @@ start(_Type, _Args) ->
     % Spin up the Web Server
     Dispatch = cowboy_router:compile([
 	{'_', [
-		{"/rest/debug", regression_rest_handler, [debug]},
+	        {"/rest/[...]", regression_rest_handler, []}, 
 		{"/[...]", regression_static_handler, [index]}
 	]}
     ]),
