@@ -13,8 +13,11 @@ start(_Type, _Args) ->
     % Spin up the Web Server
     Dispatch = cowboy_router:compile([
 	{'_', [
-	        {"/rest/[...]", regression_rest_handler, []}, 
-		{"/[...]", regression_static_handler, [index]}
+ 	       {"/static/[...]", cowboy_static, 
+			{priv_dir, regression_app, "static/"}},
+	       {"/rest/[...]", regression_rest_handler, []}, 
+	       {"/", cowboy_static, 
+			{priv_file, regression_app, "static/index.html"}}
 	]}
     ]),
     {ok, _} = cowboy:start_clear(http, [{port, 8080}], #{

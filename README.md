@@ -29,11 +29,12 @@ Alternatively, you can spin up a web-browser and point it at `http://localhost:8
 + Done. Use ETS to store points in DB, taking initial load from file. 
 + Done. Create three new message types: Add single point to DB; add multiple points to DB and add points from file to DB (stopping initial load).  
 + Done. Get cowboy webserver running serving static content
-8. Create a REST endpoint that runs regression and returns graph
-+ Done. Create REST endpoints that allows points to be added
+8. Create a webservice endpoint that runs regression and returns graph
++ Done. Create webservice endpoints that allows points to be added
 10. Place some protection around running regession without enough points.
 11. Improve graph with ticks and other labelling.
 12. Build a one page app to send the points and receive the response
+13. Make webservices REST compliant
 
 # Output
 
