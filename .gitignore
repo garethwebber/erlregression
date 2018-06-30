@@ -1,3 +1,7 @@
+### Client ###
+build
+node_modules
+### Backend ###
 .eunit
 deps
 *.o
