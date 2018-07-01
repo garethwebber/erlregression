@@ -2,7 +2,7 @@
  [{description, "Linear Regression Application"},
   {vsn, "1"},
   {modules, [regression_app,regression_db,regression_file,regression_math,
-	     regression_graph,regression_rest_handler]},
+	     regression_graph,regression_rest_point_handler]},
   {registered, [regression_app]},
   {applications, [kernel, stdlib, cowboy]},
   {included_applications, [egd]},

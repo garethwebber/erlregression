@@ -1,4 +1,4 @@
--module(regression_rest_handler).
+-module(regression_rest_point_handler).
 
 -export([init/2, allowed_methods/2,content_types_provided/2,function_selector/2]).
 
@@ -6,7 +6,7 @@ init(Req, Opts) ->
 	{cowboy_rest, Req, Opts}.
 
 allowed_methods(Req, State) ->
-    Methods = [<<"GET">>, <<"POST">>, <<"DELETE">>],
+    Methods = [<<"GET">>],
     {Methods, Req, State}.
 
 content_types_provided(Req, State) ->
@@ -18,8 +18,8 @@ content_types_provided(Req, State) ->
 function_selector(Req, State) ->
     Path = cowboy_req:path(Req),
     {Body, Req1, State1} = case Path of
-	   <<"/rest/addpoint">> -> addpoint(Req, State);
-	   <<"/rest/debug">> ->    debug(Req, State)
+	   <<"/rest/point/add">> -> addpoint(Req, State);
+	   <<"/rest/point/get">> -> getall(Req, State)
     end,
     {Body, Req1, State1}.
 
@@ -39,7 +39,7 @@ addpoint(Req, Opts) ->
 		ok -> 
 			Req1 = cowboy_req:reply(200, #{
                 	<<"content-type">> => <<"application/json">>
-        		}, <<"{\"Action\" : \"Completed\"}">>, Req);
+        		}, jiffy:encode(convert_point_to_ejson(Point)), Req);
 		_ -> 
 			Req1 = cowboy_req:reply(500, #{
                             <<"content-type">> => <<"application/json">>
@@ -48,7 +48,7 @@ addpoint(Req, Opts) ->
 
         {ok, Req1, Opts}.
 
-debug(Req0, Opts) ->
+getall(Req0, Opts) ->
 	whereis(regression_app) ! {self(), "getpoints"},
 	receive
 		{_, List} -> List

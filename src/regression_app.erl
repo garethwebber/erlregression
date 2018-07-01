@@ -15,7 +15,7 @@ start(_Type, _Args) ->
 	{'_', [
  	       {"/static/[...]", cowboy_static, 
 			{priv_dir, regression_app, "static/"}},
-	       {"/rest/[...]", regression_rest_handler, []}, 
+	       {"/rest/point/[...]", regression_rest_point_handler, []}, 
 	       {"/", cowboy_static, 
 			{priv_file, regression_app, "static/index.html"}}
 	]}
