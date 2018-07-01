@@ -11,15 +11,17 @@ start(_Type, _Args) ->
     register(regression_app, Pid),
 
     % Spin up the Web Server
-    Dispatch = cowboy_router:compile([
-	{'_', [
+    Handlers = [
+		regression_rest_point_handler
+	       ],
+    Trails = [ 
  	       {"/static/[...]", cowboy_static, 
 			{priv_dir, regression_app, "static/"}},
-	       {"/rest/point/[...]", regression_rest_point_handler, []}, 
 	       {"/", cowboy_static, 
 			{priv_file, regression_app, "static/index.html"}}
-	]}
-    ]),
+	       | trails:trails(Handlers)
+	],
+    Dispatch = trails:single_host_compile(Trails),
     {ok, _} = cowboy:start_clear(http, [{port, 8080}], #{
          env => #{dispatch => Dispatch}
     }),

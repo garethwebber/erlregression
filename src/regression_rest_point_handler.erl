@@ -1,27 +1,38 @@
 -module(regression_rest_point_handler).
 
--export([init/2, allowed_methods/2,content_types_provided/2,function_selector/2]).
+-export([init/2, rest_init/2, trails/0, allowed_methods/2,content_types_provided/2,content_types_accepted/2]).
 
 init(Req, Opts) ->
 	{cowboy_rest, Req, Opts}.
 
+rest_init(Req, _Opts) ->
+  {ok, Req, #{}}.
+
+trails() ->
+  Metadata =
+    #{get =>
+      #{tags => ["points"],
+        description => "Gets all points in database",
+        produces => ["text/plain"]
+      }
+    },
+  [trails:trail("/rest/point",?MODULE, [], Metadata)].
+
 allowed_methods(Req, State) ->
-    Methods = [<<"GET">>],
+    Methods = [<<"GET">>, <<"PUT">>],
     {Methods, Req, State}.
 
 content_types_provided(Req, State) ->
     {[
-      {<<"application/json">>, function_selector},
-      {<<"text/html">>, function_selector}
+      {<<"application/json">>, getall(Req, State)},
+      {<<"text/html">>, getall(Req, State)}
      ], Req, State}.
 
-function_selector(Req, State) ->
-    Path = cowboy_req:path(Req),
-    {Body, Req1, State1} = case Path of
-	   <<"/rest/point/add">> -> addpoint(Req, State);
-	   <<"/rest/point/get">> -> getall(Req, State)
-    end,
-    {Body, Req1, State1}.
+content_types_accepted(Req, State) ->
+    {[
+      {<<"application/json">>, addpoint(Req, State)},
+      {<<"text/html">>, addpoint(Req, State)}
+     ], Req, State}.
 
 addpoint(Req, Opts) ->
 	Points = cowboy_req:match_qs([x, y], Req),
@@ -37,29 +48,24 @@ addpoint(Req, Opts) ->
 
 	case Resp of
 		ok -> 
-			Req1 = cowboy_req:reply(200, #{
-                	<<"content-type">> => <<"application/json">>
-        		}, jiffy:encode(convert_point_to_ejson(Point)), Req);
+			Value = jiffy:encode(convert_point_to_ejson(Point));
 		_ -> 
-			Req1 = cowboy_req:reply(500, #{
-                            <<"content-type">> => <<"application/json">>
-                            }, <<"{\"Error\": \"Addpoint\"}">>, Req)
+			Value = <<"{\"Error\": \"Addpoint\"}">>
 	end,	
 
-        {ok, Req1, Opts}.
+        {Value, Req, Opts}.
 
-getall(Req0, Opts) ->
+getall(Req, State) ->
 	whereis(regression_app) ! {self(), "getpoints"},
 	receive
 		{_, List} -> List
 	end,
-        Data = convert_list_to_ejson(List),
-        JsonData = jiffy:encode(Data, [pretty]),
+        Data = jiffy:encode(convert_list_to_ejson(List)),
 
-	Req = cowboy_req:reply(200, #{
+	Req1 = cowboy_req:reply(200, #{
 		<<"content-type">> => <<"application/json">>
-	}, JsonData, Req0),
-	{ok, Req, Opts}.
+	}, Data, Req),
+	{Data, Req1, State}.
 
 convert_list_to_ejson([]) ->
 	[];
