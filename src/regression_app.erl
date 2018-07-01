@@ -12,7 +12,8 @@ start(_Type, _Args) ->
 
     % Spin up the Web Server
     Handlers = [
-		regression_rest_point_handler
+		regression_rest_point_handler,
+		cowboy_swagger_handler
 	       ],
     Trails = [ 
  	       {"/static/[...]", cowboy_static, 
@@ -21,6 +22,7 @@ start(_Type, _Args) ->
 			{priv_file, regression_app, "static/index.html"}}
 	       | trails:trails(Handlers)
 	],
+    trails:store(Trails),
     Dispatch = trails:single_host_compile(Trails),
     {ok, _} = cowboy:start_clear(http, [{port, 8080}], #{
          env => #{dispatch => Dispatch}

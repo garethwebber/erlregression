@@ -10,6 +10,7 @@ class App extends Component {
         </header>
         <p className="App-intro">
         Click here to see <a href="/rest/point">database debug content.</a><br/>
+	Click here to see the <a href="/api-docs">API documentation</a>
         </p>
       </div>
     );
