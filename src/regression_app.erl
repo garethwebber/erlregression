@@ -13,6 +13,8 @@ start(_Type, _Args) ->
     % Spin up the Web Server
     Handlers = [
 		regression_rest_point_handler,
+		regression_rest_regression_handler,
+		regression_rest_graph_handler,
 		cowboy_swagger_handler
 	       ],
     Trails = [ 
