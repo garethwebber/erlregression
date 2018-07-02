@@ -1,9 +1,11 @@
 -module(regression_rest_point_handler).
-
--export([init/2, rest_init/2, trails/0, allowed_methods/2,content_types_provided/2,content_types_accepted/2]).
+-behaviour(trails_handler).
+-export([init/2, rest_init/2, trails/0, allowed_methods/2,
+	 content_types_provided/2,content_types_accepted/2,resource_exists/2,
+	 getall/2, addpoint/2]).
 
 init(Req, Opts) ->
-	{cowboy_rest, Req, Opts}.
+       {cowboy_rest, Req, Opts}.
 
 rest_init(Req, _Opts) ->
   {ok, Req, #{}}.
@@ -11,36 +13,54 @@ rest_init(Req, _Opts) ->
 trails() ->
   Metadata =
     #{get =>
-      #{tags => ["points"],
+      #{tags => ["Manage data"],
         description => "Gets all points in database",
-        produces => ["text/plain"]
+        produces => ["application/json"]
+      },
+      put =>
+      #{tags => ["Manage data"],
+        description => "Add a point to the database",
+        produces => ["application/json"],
+        parameters => [
+          #{name => <<"x">>,
+            description => <<"X co-ordinate">>,
+            in => <<"path">>,
+            required => true,
+            type => <<"string">>},
+          #{name => <<"y">>,
+            description => <<"Y co-ordinate">>,
+            in => <<"path">>,
+            required => true,
+            type => <<"string">>}
+        ]
       }
     },
   [trails:trail("/rest/point",?MODULE, [], Metadata)].
 
-allowed_methods(Req, State) ->
-    Methods = [<<"GET">>, <<"PUT">>],
-    {Methods, Req, State}.
+content_types_accepted(Req, State) ->
+    {[
+      {{<<"application">>, <<"json">>, []}, addpoint}
+     ], Req, State}.
 
 content_types_provided(Req, State) ->
     {[
-      {<<"application/json">>, getall(Req, State)},
-      {<<"text/html">>, getall(Req, State)}
+      {{<<"application">>, <<"json">>, []}, getall}
      ], Req, State}.
 
-content_types_accepted(Req, State) ->
-    {[
-      {<<"application/json">>, addpoint(Req, State)},
-      {<<"text/html">>, addpoint(Req, State)}
-     ], Req, State}.
+allowed_methods(Req, State) ->
+    {[<<"GET">>, <<"PUT">>], Req, State}.
 
-addpoint(Req, Opts) ->
-	Points = cowboy_req:match_qs([x, y], Req),
-	{_, X} = maps:find(x, Points),
-	{_, Y} = maps:find(y, Points),
-	Point = {point, bin_to_num(X), 
-			bin_to_num(Y)},
+resource_exists(Req, _State) ->
+	{true, Req, index}.
 
+addpoint(Req, State) ->
+	error_logger:info_msg("addpoint"),
+%	Points = cowboy_req:match_qs([x, y], Req),
+%	{_, X} = maps:find(x, Points),
+%	{_, Y} = maps:find(y, Points),
+%	Point = {point, bin_to_num(X), 
+%			bin_to_num(Y)},
+Point = {point, 1, 3},
 	whereis(regression_app) ! {self(), "loadpoint", Point},
         receive
 		{_, Resp} -> Resp	
@@ -48,12 +68,17 @@ addpoint(Req, Opts) ->
 
 	case Resp of
 		ok -> 
-			Value = jiffy:encode(convert_point_to_ejson(Point));
+			Data = jiffy:encode(convert_point_to_ejson(Point));
 		_ -> 
-			Value = <<"{\"Error\": \"Addpoint\"}">>
-	end,	
+			Data = <<"{\"Error\": \"Addpoint\"}">>
+	end,
 
-        {Value, Req, Opts}.
+       % Req1 = cowboy_req:reply(200, #{
+       %         <<"content-type">> => <<"application/json">>
+       % }, Data, Req),
+%	Resp = cowboy_req:set_resp_body(Data, Req),
+	error_logger:info_msg("addpoint: ", Data),
+        {true, Req, State}.
 
 getall(Req, State) ->
 	whereis(regression_app) ! {self(), "getpoints"},
@@ -62,10 +87,8 @@ getall(Req, State) ->
 	end,
         Data = jiffy:encode(convert_list_to_ejson(List)),
 
-	Req1 = cowboy_req:reply(200, #{
-		<<"content-type">> => <<"application/json">>
-	}, Data, Req),
-	{Data, Req1, State}.
+	error_logger:info_msg("getall: ", Data),
+	{Data, Req, State}.
 
 convert_list_to_ejson([]) ->
 	[];
