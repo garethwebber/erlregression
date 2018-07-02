@@ -22,7 +22,7 @@ trails() ->
 
 content_types_provided(Req, State) ->
     {[
-      {{<<"application">>, <<"json">>, []}, getgraph}
+      {{<<"image">>, <<"png">>, []}, getgraph}
      ], Req, State}.
 
 allowed_methods(Req, State) ->

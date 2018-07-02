@@ -54,17 +54,22 @@ loop(DB) ->
 	Pid ! {self(), ok},
 	loop(DB);
 
-
     {Pid, "getpoints"} ->
 	Pid ! {self(), regression_db:get_all(DB)},
 	loop(DB);
 
     {Pid, "runregression"} ->
         Terms = regression_db:get_all(DB),
-	{regression, A, B} = regression_math:regression(Terms),
-	regression_graph:create_graph(Terms, A, B),
-	Pid ! {self(), ok},
+	Value = regression_math:regression(Terms),
+	Pid ! {self(), Value},
 	loop(DB);
+
+    {Pid, "getgraph"} ->
+        Terms = regression_db:get_all(DB),
+        {regression, A, B} = regression_math:regression(Terms),
+        Bin = regression_graph:create_graph_binary(Terms, A, B),
+        Pid ! {self(), Bin},
+        loop(DB);
 
     {Pid, "debug"} ->
 	Return = regression_db:debug(DB),

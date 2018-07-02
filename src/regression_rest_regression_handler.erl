@@ -36,8 +36,10 @@ runregression(Req, State) ->
 	receive
 		{_, Value} -> Value 
 	end,
+	{regression, A, B} = Value,
 	Return = #{<<"regression">> =>
-                     #{<<"Value">> => Value} 
+                     #{<<"A">> => A,
+		       <<"B">> => B} 
           },
 	error_logger:info_msg("runregression: ", Value),
 	{jiffy:encode(Return), Req, State}.

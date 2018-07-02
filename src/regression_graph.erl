@@ -1,7 +1,12 @@
 -module(regression_graph).
--export([create_graph/3]).
+-export([create_graph/3,create_graph_binary/3]).
 
 create_graph(Points, A, B) ->
+  Bin = create_graph_binary(Points, A, B),
+  egd:save(Bin, "output.png"),
+  io:format("Graph created~n", []).
+
+create_graph_binary(Points, A, B) ->
   Size = 600,
   Margin = 20,
 
@@ -12,9 +17,7 @@ create_graph(Points, A, B) ->
   lists:foreach(fun(H) -> plot_point(Im, Size, Margin, MaxMin, H) end, Points),
   plot_line(Im, Size, Margin, MaxMin, A, B),
 
-  Bin = egd:render(Im),
-  egd:save(Bin, "output.png"),
-  io:format("Graph created~n", []).
+  egd:render(Im).
 
 draw_axes(Image, Size, Margin, MaxMin) ->
   Black = egd:color({0,0,0}),
