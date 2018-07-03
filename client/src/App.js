@@ -2,23 +2,59 @@ import React, { Component } from 'react';
 import './App.css';
 
 class App extends Component {
+  constructor (props) {
+	  super(props)
+
+	  this.state = {
+		  points: [],
+	  };
+	  this.loadDummyData = this.loadDummyData.bind(this);
+  }
+
+  componentDidMount() {
+	this.getPoints();
+	console.log("Running getPoints");
+  }
+
   render() {
+    const points = this.state.points;
     return (
       <div className="App">
         <header className="App-header">
           <h1 className="App-title">Erlang Regression App</h1>
         </header>
+	 <div className="points">
+	    {points.map((point, index) =>
+		   <p key={index}> ({point.point.x}, {point.point.y})</p>
+	    )}
+	 </div>
         <p className="App-intro">
         Click here to see <a href="/rest/point">database debug content.</a><br/>
-	Click here to see the <a href="/api-docs">API documentation</a>
+        Click here to see the <a href="/api-docs">API documentation</a>
         </p>
-	<button onClick={loadDummyData}>Load Dummy Data</button>
+        <button onClick={this.loadDummyData}>Load Dummy Data</button>
+
       </div>
     );
   }
-}
 
-  function loadDummyData() {
+
+  getPoints() {
+    return fetch('http://localhost:8080/rest/point', {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    }).then(res => {
+        return res.json();
+    }).then(data =>{
+        this.setState({points: data});
+    }).catch(err =>  {
+        console.log("error: " + err);
+    });
+  }
+
+  loadDummyData() {
   let dummy = `[
   {
     \"point\": {
@@ -55,22 +91,19 @@ class App extends Component {
       \"y\": 24,
       \"x\": 2
     }
-  }
-]`;
-  console.log("Loading dummy data: " + dummy);
+  }]`;
   return fetch('http://localhost:8080/rest/point', {
         method: 'PUT',
-//        mode: 'CORS',
         body: dummy,
         headers: {
             'Content-Type': 'application/json'
         }
     }).then(res => {
-	console.log("Returned");
-        return res;
+	this.getPoints();
+	return res;
     }).catch(err =>  {
         console.log("error: " + err);
     });
   }
-
+}
 export default App;
