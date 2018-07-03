@@ -19,9 +19,11 @@ start(_Type, _Args) ->
 	       ],
     Trails = [ 
  	       {"/static/[...]", cowboy_static, 
-			{priv_dir, regression_app, "static/"}},
+		       {priv_dir, regression_app, "static/"}},
+               {"/favicon.ico", cowboy_static,
+                       {priv_file, regression_app, "static/favicon.ico"}},
 	       {"/", cowboy_static, 
-			{priv_file, regression_app, "static/index.html"}}
+		       {priv_file, regression_app, "static/index.html"}}
 	       | trails:trails(Handlers)
 	],
     trails:store(Trails),

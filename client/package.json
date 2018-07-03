@@ -7,6 +7,7 @@
     "react-dom": "^16.4.1",
     "react-scripts": "^1.1.4"
   },
+  "homepage" : "http://localhost:8080/static",
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
