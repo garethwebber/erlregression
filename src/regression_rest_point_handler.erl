@@ -22,14 +22,9 @@ trails() ->
         description => "Add a point to the database",
         produces => ["application/json"],
         parameters => [
-          #{name => <<"x">>,
-            description => <<"X co-ordinate">>,
-            in => <<"path">>,
-            required => true,
-            type => <<"string">>},
-          #{name => <<"y">>,
-            description => <<"Y co-ordinate">>,
-            in => <<"path">>,
+          #{name => <<"Request Body">>,
+            description => <<"Request body as JSON">>,
+	    in => body,
             required => true,
             type => <<"string">>}
         ]
@@ -39,7 +34,8 @@ trails() ->
 
 content_types_accepted(Req, State) ->
     {[
-      {{<<"application">>, <<"json">>, []}, addpoint}
+      {{<<"application">>, <<"json">>, []}, addpoint},
+      {{<<"application">>, <<"x-www-form-urlencoded">>, []}, addpoint}
      ], Req, State}.
 
 content_types_provided(Req, State) ->
@@ -54,31 +50,16 @@ resource_exists(Req, _State) ->
 	{true, Req, index}.
 
 addpoint(Req, State) ->
-	error_logger:info_msg("addpoint"),
-%	Points = cowboy_req:match_qs([x, y], Req),
-%	{_, X} = maps:find(x, Points),
-%	{_, Y} = maps:find(y, Points),
-%	Point = {point, bin_to_num(X), 
-%			bin_to_num(Y)},
-Point = {point, 1, 3},
-	whereis(regression_app) ! {self(), "loadpoint", Point},
+	{ok, RawBody, Req1} = cowboy_req:read_body(Req),
+        Body = jiffy:decode(RawBody),
+	Points = convert_ejson_to_list(Body),
+	whereis(regression_app) ! {self(), "loadlist", Points},
         receive
 		{_, Resp} -> Resp	
         end,
 
-	case Resp of
-		ok -> 
-			Data = jiffy:encode(convert_point_to_ejson(Point));
-		_ -> 
-			Data = <<"{\"Error\": \"Addpoint\"}">>
-	end,
-
-       % Req1 = cowboy_req:reply(200, #{
-       %         <<"content-type">> => <<"application/json">>
-       % }, Data, Req),
-%	Resp = cowboy_req:set_resp_body(Data, Req),
-	error_logger:info_msg("addpoint: ", Data),
-        {true, Req, State}.
+	error_logger:info_msg("addpoint: ", Points),
+        {true, Req1, State}.
 
 getall(Req, State) ->
 	whereis(regression_app) ! {self(), "getpoints"},
@@ -87,8 +68,24 @@ getall(Req, State) ->
 	end,
         Data = jiffy:encode(convert_list_to_ejson(List)),
 
-	error_logger:info_msg("getall: ", Data),
 	{Data, Req, State}.
+
+convert_ejson_to_list([]) ->
+	[];
+
+convert_ejson_to_list(List) ->
+	[H|T] = List,
+	convert_ejson_to_point(H) ++ convert_ejson_to_list(T).
+
+convert_ejson_to_point(Point) ->
+        % This is evil but works
+	Values = case Point of 
+	    {[{<<"point">>,{[{<<"y">>,Y},{<<"x">>,X}]}}]} -> {Y, X};
+	    {[{<<"point">>,{[{<<"x">>,X},{<<"y">>,Y}]}}]} -> {Y, X}	
+	end,
+	{Y, X} = Values,
+	Return = {point, X, Y},
+	[Return].
 
 convert_list_to_ejson([]) ->
 	[];
@@ -104,9 +101,3 @@ convert_point_to_ejson(Point) ->
 		<<"y">> => Y}
 	  }].
 
-bin_to_num(Bin) ->
-    N = binary_to_list(Bin),
-    case string:to_float(N) of
-        {error,no_float} -> list_to_integer(N);
-        {F,_Rest} -> F
-    end.

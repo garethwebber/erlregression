@@ -41,7 +41,7 @@ whereis(regression_app) ! {self(), "debug"}.
 + Done. Create three new message types: Add single point to DB; add multiple points to DB and add points from file to DB (stopping initial load).  
 + Done. Get cowboy webserver running serving static content
 + Done. Create a webservice endpoint that runs regression and returns graph
-9. Create webservice endpoints that allows points to be added
++ Done. Create webservice endpoints that allows points to be added
 10. Place some protection around running regession without enough points.
 11. Create nice React front-end rather than swagger.
 12. Improve graph with ticks and other labelling.
