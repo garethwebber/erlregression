@@ -26,6 +26,17 @@ trails() ->
             description => <<"Request body as JSON">>,
 	    in => body,
             required => true,
+	    example => <<"[
+ 			   { \"point\": {
+      				\"y\": -3,
+      				\"x\": -4
+    			     }
+                           },
+  			   { \"point\": {
+      				\"y\": 3,
+      				\"x\": -2
+    			     }
+                           }]">>,
             type => <<"string">>}
         ]
       }
