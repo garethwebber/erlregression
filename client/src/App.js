@@ -7,8 +7,11 @@ class App extends Component {
 
 	  this.state = {
 		  points: [],
+		  regression: "",
+		  count: 0,
 	  };
 	  this.loadDummyData = this.loadDummyData.bind(this);
+	  this.runRegression = this.runRegression.bind(this);
   }
 
   componentDidMount() {
@@ -18,22 +21,25 @@ class App extends Component {
 
   render() {
     const points = this.state.points;
+    const count = this.state.count;
+    const regression = this.state.regression;
     return (
       <div className="App">
         <header className="App-header">
           <h1 className="App-title">Erlang Regression App</h1>
         </header>
-	 <div className="points">
+	 <div className="points"><p>There are {count} points:</p>
 	    {points.map((point, index) =>
 		   <p key={index}> ({point.point.x}, {point.point.y})</p>
 	    )}
 	 </div>
+	<p>{regression}</p>
         <p className="App-intro">
         Click here to see <a href="/rest/point">database debug content.</a><br/>
         Click here to see the <a href="/api-docs">API documentation</a>
         </p>
         <button onClick={this.loadDummyData}>Load Dummy Data</button>
-
+	<button onClick={this.runRegression}>Run Regression</button>
       </div>
     );
   }
@@ -48,7 +54,10 @@ class App extends Component {
     }).then(res => {
         return res.json();
     }).then(data =>{
-        this.setState({points: data});
+        this.setState({
+		points: data,
+		count: Object.keys(data).length,
+	});
     }).catch(err =>  {
         console.log("error: " + err);
     });
@@ -101,6 +110,25 @@ class App extends Component {
     }).then(res => {
 	this.getPoints();
 	return res;
+    }).catch(err =>  {
+        console.log("error: " + err);
+    });
+  }
+
+  runRegression() {
+    return fetch('http://localhost:8080/rest/point', {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json'
+        }
+        }).then(res => {
+        return res.json();
+    }).then(data =>{
+	console.log("Data: " + data);
+        return data;
+	//this.setState({
+        //        regression: data,
+        //});
     }).catch(err =>  {
         console.log("error: " + err);
     });
