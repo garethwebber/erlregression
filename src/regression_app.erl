@@ -5,9 +5,11 @@
 start(_Type, _Args) ->
     % Spin up the points database
     DB = regression_db:start(),
+    io:format("Started ETS database~n", []),
 
     % Spin up the App Server
     Pid = spawn_link(fun() -> loop(DB) end),
+    io:format("Started Regression App server~n", []),
     register(regression_app, Pid),
 
     % Spin up the Web Server
@@ -36,13 +38,11 @@ start(_Type, _Args) ->
     end, 
 
     Dispatch = trails:single_host_compile(Trails),
-    io:format("Starting Cowboy on port: ~w~n", [Port]),
     {ok, _} = cowboy:start_clear(http, [{port, Port}], #{
          env => #{dispatch => Dispatch}
     }),
+    io:format("Started REST API via Cowboy on port: ~w~n", [Port]),
     gen_server:start_link({local, ?MODULE}, ?MODULE, [], []),
-
-    %{ok, Pid}.
     regression_sup:start_link().
 
 stop(_State) ->
