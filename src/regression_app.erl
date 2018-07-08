@@ -42,7 +42,8 @@ start(_Type, _Args) ->
     }),
     gen_server:start_link({local, ?MODULE}, ?MODULE, [], []),
 
-    {ok, Pid}.
+    %{ok, Pid}.
+    regression_sup:start_link().
 
 stop(_State) ->
     ok.
