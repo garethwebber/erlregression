@@ -46,7 +46,7 @@ class App extends Component {
 
 
   getPoints() {
-    return fetch('http://localhost:8080/rest/point', {
+    return fetch('/rest/point', {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json'
@@ -101,7 +101,7 @@ class App extends Component {
       \"x\": 2
     }
   }]`;
-  return fetch('http://localhost:8080/rest/point', {
+  return fetch('/rest/point', {
         method: 'PUT',
         body: dummy,
         headers: {
@@ -116,7 +116,7 @@ class App extends Component {
   }
 
   runRegression() {
-    return fetch('http://localhost:8080/rest/point', {
+    return fetch('/rest/point', {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json'
