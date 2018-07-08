@@ -27,8 +27,17 @@ start(_Type, _Args) ->
 	       | trails:trails(Handlers)
 	],
     trails:store(Trails),
+
+    case os:getenv("PORT") of
+        false ->
+            Port = 8080; 
+        Other ->
+            Port = list_to_integer(Other)
+    end, 
+
     Dispatch = trails:single_host_compile(Trails),
-    {ok, _} = cowboy:start_clear(http, [{port, 8080}], #{
+    io:format("Starting Cowboy on port: ~w~n", [Port]),
+    {ok, _} = cowboy:start_clear(http, [{port, Port}], #{
          env => #{dispatch => Dispatch}
     }),
     gen_server:start_link({local, ?MODULE}, ?MODULE, [], []),
