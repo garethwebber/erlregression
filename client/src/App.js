@@ -9,44 +9,50 @@ class App extends Component {
 		  points: [],
 		  regression: "",
 		  count: 0,
+		  graph: null,
 	  };
 	  this.loadDummyData = this.loadDummyData.bind(this);
-	  this.runRegression = this.runRegression.bind(this);
+	  this.getRegression = this.getRegression.bind(this);
   }
 
   componentDidMount() {
-	this.getPoints();
-	console.log("Running getPoints");
+	this.getRegression();
   }
 
   render() {
     const points = this.state.points;
     const count = this.state.count;
     const regression = this.state.regression;
+    const graph = this.state.graph;
     return (
-      <div className="App">
-        <header className="App-header">
+      <div class="App">
+        <header class="App-header">
           <h1 className="App-title">Erlang Regression App</h1>
         </header>
-	 <div className="points"><p>There are {count} points:</p>
+	 <div class="leftcolumn"><p>There are {count} points:</p>
 	    {points.map((point, index) =>
 		   <p key={index}> ({point.point.x}, {point.point.y})</p>
 	    )}
-	 </div>
 	<p>{regression}</p>
-        <p className="App-intro">
+	<div class="h_line"></div>
+        <p>
         Click here to see <a href="/rest/point">database debug content.</a><br/>
         Click here to see the <a href="/api-docs">API documentation</a>
         </p>
-        <button onClick={this.loadDummyData}>Load Dummy Data</button>
-	<button onClick={this.runRegression}>Run Regression</button>
-      </div>
+        <div class="h_line"></div>
+	<button onClick={this.loadDummyData}>Load Dummy Data</button>
+	</div>
+	<div class="rightcolumn">
+	<img src={graph}/>
+	</div>
+	</div>
     );
   }
 
 
-  getPoints() {
-    return fetch('/rest/point', {
+  async getRegression() {
+    // Get Points from the database
+    const req1 = await fetch('/rest/point', {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json'
@@ -58,12 +64,48 @@ class App extends Component {
 		points: data,
 		count: Object.keys(data).length,
 	});
+	console.log("Loaded " + this.state.count + " points");
     }).catch(err =>  {
         console.log("error: " + err);
     });
+
+    // If there are more than two points run the regression
+    if(this.state.count > 2) {
+      let req2 = await fetch('/rest/regression', {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json'
+        }
+      }).then(res => {
+        return res.json();
+      }).then(data =>{
+        console.log("Regression result " + data);
+      }).catch(err =>  {
+        console.log("error: " + err);
+      });
+
+      // Get the graph and create a URL for it  
+      let ret1 = fetch('/rest/graph', {
+        method: 'GET',
+        headers: {
+//            'Content-Type': 'application/json'
+        }
+      }).then(res => {
+	   return res.blob();
+      }).then(graphblob => {
+	let objectURL = URL.createObjectURL(graphblob);
+	this.setState({ 
+                graph: objectURL,
+        });
+	console.log("Got graph: " + objectURL + "bytes.");
+      }).catch(err =>  {
+        console.log("error: " + err);
+      });
+    }
+    return true;
   }
 
-  loadDummyData() {
+  async loadDummyData() {
   let dummy = `[
   {
     \"point\": {
@@ -101,37 +143,21 @@ class App extends Component {
       \"x\": 2
     }
   }]`;
-  return fetch('/rest/point', {
+  let ret1 = await fetch('/rest/point', {
         method: 'PUT',
         body: dummy,
         headers: {
             'Content-Type': 'application/json'
         }
     }).then(res => {
-	this.getPoints();
 	return res;
     }).catch(err =>  {
         console.log("error: " + err);
     });
+
+    this.getRegression();
   }
 
-  runRegression() {
-    return fetch('/rest/point', {
-        method: 'GET',
-        headers: {
-            'Content-Type': 'application/json'
-        }
-        }).then(res => {
-        return res.json();
-    }).then(data =>{
-	console.log("Data: " + data);
-        return data;
-	//this.setState({
-        //        regression: data,
-        //});
-    }).catch(err =>  {
-        console.log("error: " + err);
-    });
-  }
+
 }
 export default App;
