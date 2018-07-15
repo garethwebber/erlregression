@@ -42,8 +42,8 @@ whereis(regression_app) ! {self(), "debug"}.
 + Done. Get cowboy webserver running serving static content
 + Done. Create a webservice endpoint that runs regression and returns graph
 + Done. Create webservice endpoints that allows points to be added
-10. Place some protection around running regession without enough points.
-11. Create nice React front-end rather than swagger.
++ Done. Build a one page app to send the points and receive the response
+10. Add ability to add points rather than just dummy data.
+11. Add ability to delete points.
 12. Improve graph with ticks and other labelling.
-13. Build a one page app to send the points and receive the response
-
+13. Put main part of app into gen_server handler and set up supervisor.
