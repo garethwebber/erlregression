@@ -36,6 +36,5 @@ getgraph(Req, State) ->
 	receive
 		{_, Value} -> Value 
 	end,
-	error_logger:info_msg("getgraph."),
 	{Value, Req, State}.
 

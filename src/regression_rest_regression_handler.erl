@@ -41,6 +41,5 @@ runregression(Req, State) ->
                      #{<<"A">> => A,
 		       <<"B">> => B} 
           },
-	error_logger:info_msg("runregression: ", Value),
 	{jiffy:encode(Return), Req, State}.
 
