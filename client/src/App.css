@@ -46,5 +46,6 @@ img {
     overflow: hidden;
     position: relative;
     max-width: 100%;
-    height: auto;
+    height: 50vh;
+    width: 50vw;
 }
