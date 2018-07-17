@@ -29,26 +29,32 @@ class App extends Component {
         <header class="App-header">
           <h1 className="App-title">Erlang Regression App</h1>
         </header>
-	 <div class="leftcolumn"><p>There are {count} points:</p>
+	<div class="leftcolumn"><p>There are {count} points:</p>
 	    {points.map((point, index) =>
 		   <p key={index}> ({point.point.x}, {point.point.y})</p>
 	    )}
 	<p>{regression}</p>
-	<div class="h_line"></div>
-        <p>
-        Click here to see <a href="/rest/point">database debug content.</a><br/>
-        Click here to see the <a href="/api-docs">API documentation</a>
-        </p>
-        <div class="h_line"></div>
-	<button onClick={this.loadDummyData}>Load Dummy Data</button>
 	</div>
 	<div class="rightcolumn">
-	<img src={graph}/>
+	{count < 2 && 
+	<span>
+                <p>You need two or more points to run a regression. Enter some
+                using form to the left, or load some dummy data</p>.
+                <button onClick={this.loadDummyData}>Load Dummy Data</button>
+        </span>
+	}
+        {count > 1 && <img src={graph}/>}
+	</div>
+	<div class="footer">
+	<hr />
+        <p>Erlang/React example application by Gareth Webber. Released under open source&nbsp; 
+	   <a href="https://raw.githubusercontent.com/garethwebber/erlregression/master/LICENSE">licence</a>.<br />
+	Swagger <a href="/api-docs">API documentation</a> for the
+	    Elang provide REST interface.</p>
 	</div>
 	</div>
     );
   }
-
 
   async getRegression() {
     // Get Points from the database
