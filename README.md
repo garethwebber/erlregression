@@ -47,3 +47,6 @@ whereis(regression_app) ! {self(), "debug"}.
 11. Add ability to delete points.
 12. Improve graph with ticks and other labelling.
 13. Put main part of app into gen_server handler and set up supervisor.
+
+# Credits
+Delete can icon made by https://www.flaticon.com/authors/freepik

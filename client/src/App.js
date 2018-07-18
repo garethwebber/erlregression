@@ -17,6 +17,7 @@ class App extends Component {
 	  this.getRegression = this.getRegression.bind(this);
 	  this.handleSubmit = this.handleSubmit.bind(this);
 	  this.handleChange = this.handleChange.bind(this);
+	  this.handleDelete = this.handleDelete.bind(this);
   }
 
   componentDidMount() {
@@ -42,7 +43,11 @@ class App extends Component {
               {point.point.x}
             ,
               {point.point.y}
-            )
+            )&nbsp;
+            <img width="16" height="16" alt="delete"
+		  id={'[{"point" : { "x" : ' + point.point.x + ', "y" : ' + point.point.y + '}}]'}
+		  src="/static/trash-can.png"
+		  onClick={this.handleDelete}/>
             </p>
           ))}
           <p>
@@ -142,6 +147,20 @@ class App extends Component {
     });
   }
 
+  async handleDelete(event) {
+    const point = event.target.id;
+ 
+    return await fetch('/rest/point', {
+      method: 'DELETE',
+      body: point,
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    }).then(res => res).catch((err) => {
+      console.log(`error: ${err}`);
+    });
+  }
+
   async handleSubmit(event) {
     const point = `[{
       "point": {
@@ -207,6 +226,7 @@ class App extends Component {
     }).then(res => res).catch((err) => {
       console.log(`error: ${err}`);
     });
-  }
+    this.getRegression();
+  };
 }
 export default App;

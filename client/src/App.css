@@ -49,7 +49,7 @@ p {
     font-size: 12px;
 }
 
-img {
+.rightcolumn img {
     overflow: hidden;
     position: relative;
     max-width: 420px;
