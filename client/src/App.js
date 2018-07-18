@@ -10,9 +10,13 @@ class App extends Component {
 		  regression: '',
 		  count: 0,
 		  graph: null,
+		  x: '',
+		  y: '',
 	  };
 	  this.loadDummyData = this.loadDummyData.bind(this);
 	  this.getRegression = this.getRegression.bind(this);
+	  this.handleSubmit = this.handleSubmit.bind(this);
+	  this.handleChange = this.handleChange.bind(this);
   }
 
   componentDidMount() {
@@ -44,19 +48,30 @@ class App extends Component {
           <p>
             {regression}
           </p>
-        </div>
+<form onSubmit={this.handleSubmit}>
+  <label>
+    X:
+    <input type="text" name="x" value={this.state.x} onChange={this.handleChange}/>
+  </label>
+  <label>
+    Y:
+    <input type="text" name="y" yalue={this.state.y} onChange={this.handleChange}/>
+  </label>
+  <input type="submit" value="Add Point" />
+</form>
+	    </div>
         <div className="rightcolumn">
-          {count < 2
+          {count < 3
 	&& (
 <span>
-  <p>You need two or more points to run a regression. Enter some
+  <p>You need three or more points to run a regression. <br />Enter some
      using form to the left, or load some dummy data.
   </p>
   <button onClick={this.loadDummyData}>Load Dummy Data </button>
 </span>
 	)
 	}
-          {count > 1 && <img src={graph} />}
+          {count > 2 && <img src={graph} />}
         </div>
         <div className="footer">
           <hr />
@@ -118,6 +133,33 @@ class App extends Component {
     return true;
   }
 
+  handleChange(event) {
+    const target = event.target.name;
+    const value = event.target.value;
+
+    this.setState({
+      [target]: value
+    });
+  }
+
+  async handleSubmit(event) {
+    const point = `[{
+      "point": {
+        "x": ` + this.state.x + `,
+        "y": ` + this.state.y + `
+      }
+    }]`;
+    return await fetch('/rest/point', {
+      method: 'PUT',
+      body: point,
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    }).then(res => res).catch((err) => {
+      console.log(`error: ${err}`);
+    });
+  }
+
   async loadDummyData() {
     const dummy = `[
   {
@@ -165,8 +207,6 @@ class App extends Component {
     }).then(res => res).catch((err) => {
       console.log(`error: ${err}`);
     });
-
-    this.getRegression();
   }
 }
 export default App;

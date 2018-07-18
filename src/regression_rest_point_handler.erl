@@ -69,7 +69,6 @@ addpoint(Req, State) ->
 		{_, Resp} -> Resp	
         end,
 
-%	error_logger:info_msg("addpoint: ", Points),
         {true, Req1, State}.
 
 getall(Req, State) ->

@@ -43,7 +43,7 @@ whereis(regression_app) ! {self(), "debug"}.
 + Done. Create a webservice endpoint that runs regression and returns graph
 + Done. Create webservice endpoints that allows points to be added
 + Done. Build a one page app to send the points and receive the response
-10. Add ability to add points rather than just dummy data.
++ Done. Add ability to add points rather than just dummy data.
 11. Add ability to delete points.
 12. Improve graph with ticks and other labelling.
 13. Put main part of app into gen_server handler and set up supervisor.
