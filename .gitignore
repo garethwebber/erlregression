@@ -6,8 +6,6 @@ node_modules
 deps
 *.o
 *.beam
-*.plt
-*.png
 #*.lock
 erl_crash.dump
 _build
