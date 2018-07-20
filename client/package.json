@@ -6,7 +6,8 @@
     "@material-ui/core": "^1.4.0",
     "react": "^16.4.1",
     "react-dom": "^16.4.1",
-    "react-scripts": "^1.1.4"
+    "react-scripts": "^1.1.4",
+    "typeface-roboto": "0.0.54"
   },
   "homepage": "http://localhost:8080/static",
   "scripts": {
