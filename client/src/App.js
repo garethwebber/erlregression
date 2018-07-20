@@ -1,5 +1,7 @@
 import React from 'react';
-import {AppBar, Button, Grid, List, ListItem, TextField, Typography} from '@material-ui/core';
+import {AppBar, Button, Grid, List, ListItem, 
+	IconButton, ListItemText, ListItemSecondaryAction,
+	Paper, TextField, Typography} from '@material-ui/core';
 import 'typeface-roboto';
 import './App.css';
 
@@ -46,18 +48,20 @@ export default class App extends React.Component {
          
 	  <List>
           {points.map((point, index) => (
+            <Paper>
             <ListItem key={index}>
-	    (
-              {point.point.x}
-            ,
-              {point.point.y}
-            )
+	    <ListItemText primary={'(' + point.point.x + ', ' +
+                                   point.point.y + ')'} />
+           <ListItemSecondaryAction>
+                <IconButton aria-label="Delete">
             <img width="16" height="16" alt="delete"
 		  id={'[{"point" : { "x" : ' + point.point.x + ', "y" : ' + point.point.y + '}}]'}
 		  src="/static/trash-can.png"
 		  onClick={this.handleDelete}/>
-
+                </IconButton>
+              </ListItemSecondaryAction>
             </ListItem>
+            </Paper>
           ))}
           </List>
 
