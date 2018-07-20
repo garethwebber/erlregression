@@ -13,20 +13,9 @@
   align-items: start;
 }
 
-.App-logo {
-  height: 80px;
-}
-
 .App-header {
-  background-color: #222;
-  height: 75px;
   padding: 20px;
-  color: white;
   grid-area: a;
-}
-
-.App-title {
-  font-size: 1.5em;
 }
 
 .leftcolumn {

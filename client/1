@@ -1,19 +1,19 @@
-import React from 'react';
-import {Button, TextField, Typography} from '@material-ui/core';
+import React, { Component } from 'react';
+import Button from '@material-ui/core/Button';
 import './App.css';
 
-export default class App extends React.Component {
-   state = {
-                  points: [],
-                  regression: '',
-                  count: 0,
-                  graph: null,
-                  x: '',
-                  y: '',        
-  };
-  
+class App extends Component {
   constructor(props) {
 	  super(props);
+
+	  this.state = {
+		  points: [],
+		  regression: '',
+		  count: 0,
+		  graph: null,
+		  x: '',
+		  y: '',
+	  };
 	  this.loadDummyData = this.loadDummyData.bind(this);
 	  this.getRegression = this.getRegression.bind(this);
 	  this.handleSubmit = this.handleSubmit.bind(this);
@@ -33,15 +33,11 @@ export default class App extends React.Component {
     return (
       <div className="App">
         <header className="App-header">
-	   <Typography variant='display1' align='center' gutterBottom>
-              Erlang Regression App            
-           </Typography>
+          <h1 className="App-title">Erlang Regression App</h1>
         </header>
         <div className="leftcolumn">
-          <Typography variant="title" gutterBottom>
-	  There are {count} points:
-	  </Typography>
-          
+          <p>There are {count} points:
+          </p>
           {points.map((point, index) => (
             <p key={index}>
 	    (
@@ -59,20 +55,25 @@ export default class App extends React.Component {
             {regression}
           </p>
 <form onSubmit={this.handleSubmit}>
-  <TextField name="x" label="X" value={this.state.x} onChange={this.handleChange} margin="normal"/>
-  <TextField name="y" label="Y" yalue={this.state.y} onChange={this.handleChange} margin="normal"/>
-  <Button variant="raised" color="primary" type="submit">Add Point</Button>
-</form> 
+  <label>
+    X:
+    <input type="text" name="x" value={this.state.x} onChange={this.handleChange}/>
+  </label>
+  <label>
+    Y:
+    <input type="text" name="y" yalue={this.state.y} onChange={this.handleChange}/>
+  </label>
+  <button variant="raised" color="primary" type="submit">Add Point</button>
+</form>
 	    </div>
         <div className="rightcolumn">
           {count < 3
 	&& (
 <span>
-  <Typography align='center' gutterBottom>
-  You need three or more points to run a regression. <br />Enter some
+  <p>You need three or more points to run a regression. <br />Enter some
      using form to the left, or load some dummy data.
- </Typography> 
-  <Button variant="raised" color="primary" onClick={this.loadDummyData}>Load Dummy Data </Button>
+  </p>
+  <button variant="raised" color="primary" onClick={this.loadDummyData}>Load Dummy Data </button>
 </span>
 	)
 	}
@@ -80,14 +81,13 @@ export default class App extends React.Component {
         </div>
         <div className="footer">
           <hr />
-	  <Typography align='center' gutterBottom>
-          Erlang/React example application by Gareth Webber. 
+          <p>Erlang/React example application by Gareth Webber. 
 	     Released under open source&nbsp; 
 	    <a href="https://raw.githubusercontent.com/garethwebber/erlregression/master/LICENSE">licence</a>.
             <br />
 	    Swagger <a href="/api-docs">API documentation</a> for the
 	    Elang provide REST interface.
-          </Typography> 
+          </p>
         </div>
       </div>
     );
@@ -230,3 +230,4 @@ export default class App extends React.Component {
     this.getRegression();
   };
 }
+export default App;
