@@ -130,7 +130,8 @@ export default class App extends React.Component {
       }).then(res => res.json()).then((data) => {
 	const B = data.regression.B.toFixed(2);
 	const A = data.regression.A.toFixed(2);
- 
+        
+	console.log('Y = ' + B + 'x + ' + A + '.');
 	this.setState({
 		regression: 'Y = ' + B + 'x + ' + A + '.'
 	});
