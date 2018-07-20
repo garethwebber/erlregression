@@ -85,7 +85,7 @@ export default class App extends React.Component {
 </span>
 	)
 	}
-          {count > 2 && <img src={graph} />}
+          {count > 2 && <img alt="regresssion graph" src={graph} />}
 	</Grid>
         <Grid item xs={12}>
           <hr />
@@ -199,39 +199,39 @@ export default class App extends React.Component {
   async loadDummyData() {
     const dummy = `[
   {
-    \"point\": {
-      \"y\": -3,
-      \"x\": -4
+    "point": {
+      "y": -3,
+      "x": -4
     }
   },
   {
-    \"point\": {
-      \"y\": 3,
-      \"x\": -2
+    "point": {
+      "y": 3,
+      "x": -2
     }
   },
   {
-    \"point\": {
-      \"y\": 11,
-      \"x\": -1
+    "point": {
+      "y": 11,
+      "x": -1
     }
   },
   {
-    \"point\": {
-      \"y\": 13,
-      \"x\": 0
+    "point": {
+      "y": 13,
+      "x": 0
     }
   },
   {
-    \"point\": {
-      \"y\": 21,
-      \"x\": 1
+    "point": {
+      "y": 21,
+      "x": 1
     }
   },
   {
-    \"point\": {
-      \"y\": 24,
-      \"x\": 2
+    "point": {
+      "y": 24,
+      "x": 2
     }
   }]`;
     const ret1 = await fetch('/rest/point', {
