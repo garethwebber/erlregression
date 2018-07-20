@@ -42,8 +42,11 @@ export default class App extends React.Component {
         </AppBar>
 	<Grid container xs={12} spacing={24444}>
 	<Grid item xs={6}>
-          <Typography variant="title" gutterBottom>
-	  There are {count} points:
+	  <Typography variant="title" gutterBottom>
+          {regression}
+          </Typography>
+          <Typography variant="subheading" gutterBottom>
+	  There are {count} points.
 	  </Typography>
          
 	  <List>
@@ -64,10 +67,6 @@ export default class App extends React.Component {
             </Paper>
           ))}
           </List>
-
-          <p>
-            {regression}
-          </p>
 <form onSubmit={this.handleSubmit}>
   <TextField name="x" label="X" value={this.state.x} onChange={this.handleChange} margin="normal"/>
   <TextField name="y" label="Y" yalue={this.state.y} onChange={this.handleChange} margin="normal"/>
@@ -129,7 +128,12 @@ export default class App extends React.Component {
           'Content-Type': 'application/json',
         },
       }).then(res => res.json()).then((data) => {
-        console.log(`Regression result ${data}`);
+	const B = data.regression.B.toFixed(2);
+	const A = data.regression.A.toFixed(2);
+ 
+	this.setState({
+		regression: 'Y = ' + B + 'x + ' + A + '.'
+	});
       }).catch((err) => {
         console.log(`error: ${err}`);
       });
