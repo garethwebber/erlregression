@@ -85,7 +85,7 @@ export default class App extends React.Component {
 </span>
 	)
 	}
-          {count > 2 && <img alt="regresssion graph" src={graph} />}
+          {count > 2 && <img class="reggraph" alt="regresssion graph" src={graph} />}
 	</Grid>
         <Grid item xs={12}>
           <hr />
