@@ -3,14 +3,8 @@
 -export([start/2, stop/1]).
 
 start(_Type, _Args) ->
-    % Spin up the points database
-    DB = regression_db:start(),
-    io:format("Started ETS database~n", []),
-
     % Spin up the App Server
-    Pid = spawn_link(fun() -> loop(DB) end),
-    io:format("Started Regression App server~n", []),
-    register(regression_app, Pid),
+    regression_server:start(),
 
     % Spin up the Web Server
     Handlers = [
@@ -42,51 +36,48 @@ start(_Type, _Args) ->
          env => #{dispatch => Dispatch}
     }),
     io:format("Started REST API via Cowboy on port: ~w~n", [Port]),
-    gen_server:start_link({local, ?MODULE}, ?MODULE, [], []),
-    regression_sup:start_link().
+
+    Pid = spawn_link(fun() -> loop() end),
+    register(regression_app, Pid),    
+    io:format("Regression App running: ~w~n", [Pid]),
+    {ok, Pid}.
 
 stop(_State) ->
     ok.
 
-loop(DB) ->
+loop() ->
   receive
     {Pid, "loadpoint", Point} ->
-        regression_db:insert_point(DB, Point),
+        regression_server:load_point(Point),
         Pid ! {self(), ok},
-        loop(DB);
+        loop();
 
     {Pid, "loadlist", List} ->
-        regression_db:insert_list(DB, List),
+        regression_server:load_list(List),
         Pid ! {self(), ok},
-        loop(DB);
+        loop();
 
     {Pid, "loadfile", File} ->
-        Terms = regression_file:load_file_points(File),
-        regression_db:insert_list(DB, Terms),
-	Pid ! {self(), ok},
-	loop(DB);
+        regression_server:load_file(File),
+        Pid ! {self(), ok},
+	loop();
 
     {Pid, "getpoints"} ->
-	Pid ! {self(), regression_db:get_all(DB)},
-	loop(DB);
+	Pid ! {self(), regression_server:get_points()},
+	loop();
 
     {Pid, "runregression"} ->
-        Terms = regression_db:get_all(DB),
-	Value = regression_math:regression(Terms),
-	Pid ! {self(), Value},
-	loop(DB);
+	Pid ! {self(), regression_server:run_regression()},
+	loop();
 
     {Pid, "getgraph"} ->
-        Terms = regression_db:get_all(DB),
-        {regression, A, B} = regression_math:regression(Terms),
-        Bin = regression_graph:create_graph_binary(Terms, A, B),
-        Pid ! {self(), Bin},
-        loop(DB);
+        Pid ! {self(), regression_server:get_graph()},
+        loop();
 
     {Pid, "debug"} ->
-	Return = regression_db:debug(DB),
-	Pid ! {self(), Return},
-	loop(DB);
+        io:format("Dubug~n",[]),
+	Pid ! {self(), regression_server:debug()},
+	loop();
 	  
     stop ->
        true
