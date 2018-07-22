@@ -104,25 +104,26 @@ export default class App extends React.Component {
   }
 
   async getRegression() {
+    // Hold new state and update at end of method
+   var newState = Object.assign({}, this.state);
+
     // Get Points from the database
-    const req1 = await fetch('/rest/point', {
+    await fetch('/rest/point', {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
       },
     }).then(res => res.json()).then((data) => {
-      this.setState({
-        points: data,
-        count: Object.keys(data).length,
-      });
-      console.log(`Loaded ${this.state.count} points`);
+      newState.points = data;
+      newState.count = Object.keys(data).length;
+      console.log(`Loaded ${newState.count} points`);
     }).catch((err) => {
-      console.log(`error: ${err}`);
+      console.log(`error fetching points: ${err}`);
     });
 
     // If there are more than two points run the regression
-    if (this.state.count > 2) {
-      const req2 = await fetch('/rest/regression', {
+    if (newState.count > 2) {
+      await fetch('/rest/regression', {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
@@ -132,26 +133,24 @@ export default class App extends React.Component {
 	const A = data.regression.A.toFixed(2);
         
 	console.log('Y = ' + B + 'x + ' + A + '.');
-	this.setState({
-		regression: 'Y = ' + B + 'x + ' + A + '.'
-	});
+	newState.regression = 'Y = ' + B + 'x + ' + A + '.';
       }).catch((err) => {
-        console.log(`error: ${err}`);
+        console.log(`error getting regression: ${err}`);
       });
 
       // Get the graph and create a URL for it
-      const ret1 = fetch('/rest/graph', {
+      await fetch('/rest/graph', {
         method: 'GET',
       }).then(res => res.blob()).then((graphblob) => {
         const objectURL = URL.createObjectURL(graphblob);
-        this.setState({
-          graph: objectURL,
-        });
+        newState.graph = objectURL;
         console.log(`Got graph: ${objectURL}bytes.`);
       }).catch((err) => {
-        console.log(`error: ${err}`);
+        console.log(`error getting graph: ${err}`);
       });
     }
+
+    this.setState(newState);
     return true;
   }
 
