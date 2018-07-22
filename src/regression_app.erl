@@ -37,48 +37,9 @@ start(_Type, _Args) ->
     }),
     io:format("Started REST API via Cowboy on port: ~w~n", [Port]),
 
-    Pid = spawn_link(fun() -> loop() end),
-    register(regression_app, Pid),    
-    io:format("Regression App running: ~w~n", [Pid]),
-    {ok, Pid}.
+    io:format("Regression App servers running, now exiting. ~n", []),
+    {ok, self()}.
 
 stop(_State) ->
     ok.
 
-loop() ->
-  receive
-    {Pid, "loadpoint", Point} ->
-        regression_server:load_point(Point),
-        Pid ! {self(), ok},
-        loop();
-
-    {Pid, "loadlist", List} ->
-        regression_server:load_list(List),
-        Pid ! {self(), ok},
-        loop();
-
-    {Pid, "loadfile", File} ->
-        regression_server:load_file(File),
-        Pid ! {self(), ok},
-	loop();
-
-    {Pid, "getpoints"} ->
-	Pid ! {self(), regression_server:get_points()},
-	loop();
-
-    {Pid, "runregression"} ->
-	Pid ! {self(), regression_server:run_regression()},
-	loop();
-
-    {Pid, "getgraph"} ->
-        Pid ! {self(), regression_server:get_graph()},
-        loop();
-
-    {Pid, "debug"} ->
-        io:format("Dubug~n",[]),
-	Pid ! {self(), regression_server:debug()},
-	loop();
-	  
-    stop ->
-       true
-  end.

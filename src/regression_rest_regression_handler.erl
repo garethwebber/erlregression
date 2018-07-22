@@ -32,11 +32,7 @@ resource_exists(Req, _State) ->
 	{true, Req, index}.
 
 runregression(Req, State) ->
-	whereis(regression_app) ! {self(), "runregression"},
-	receive
-		{_, Value} -> Value 
-	end,
-	{regression, A, B} = Value,
+	{regression, A, B} = regression_server:run_regression(),
 	Return = #{<<"regression">> =>
                      #{<<"A">> => A,
 		       <<"B">> => B} 

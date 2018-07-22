@@ -22,13 +22,13 @@ Start the application on the command line using `rebar3 shell`. You can then spi
 To run, execute `rebar3 shell` which will start erlang and load the regression_app. To see something enter: 
 
 ```erlang
-whereis(regression_app) ! {self(), "loadfile", "points.dat"}.
-whereis(regression_app) ! {self(), "runregression"}.         
+regression_server:load_file("points.dat").
+regression_server:run_regression().
 
-whereis(regression_app) ! {self(), "loadpoint", {point, -1, 20}}.
-whereis(regression_app) ! {self(), "runregression"}.             
+regression_server:load_point({point, -2, 2}).
+regression_server:run_regression().
 
-whereis(regression_app) ! {self(), "debug"}.        
+regression_server:debug().
 ```
 
 ## Journey

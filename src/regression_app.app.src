@@ -4,7 +4,7 @@
   {modules, [regression_app,regression_sup,regression_server,regression_db,regression_file,regression_math,
 	     regression_graph,regression_rest_point_handler,regression_rest_regression_handler,
 	     regression_rest_graph_handler]},
-  {registered, [regression_app]},
+  {registered, [regression_server]},
   {applications, [kernel, stdlib, cowboy, trails,cowboy_swagger]},
   {included_applications, [egd]},
   {mod, {regression_app,[]}}

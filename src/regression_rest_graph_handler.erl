@@ -32,9 +32,5 @@ resource_exists(Req, _State) ->
 	{true, Req, index}.
 
 getgraph(Req, State) ->
-	whereis(regression_app) ! {self(), "getgraph"},
-	receive
-		{_, Value} -> Value 
-	end,
-	{Value, Req, State}.
+	{regression_server:get_graph(), Req, State}.
 

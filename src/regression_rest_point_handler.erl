@@ -64,19 +64,13 @@ addpoint(Req, State) ->
 	{ok, RawBody, Req1} = cowboy_req:read_body(Req),
         Body = jiffy:decode(RawBody),
 	Points = convert_ejson_to_list(Body),
-	whereis(regression_app) ! {self(), "loadlist", Points},
-        receive
-		{_, Resp} -> Resp	
-        end,
+	regression_server:load_list(Points),
 
         {true, Req1, State}.
 
 getall(Req, State) ->
-	whereis(regression_app) ! {self(), "getpoints"},
-	receive
-		{_, List} -> List
-	end,
-        Data = jiffy:encode(convert_list_to_ejson(List)),
+        List = regression_server:get_points(),
+	Data = jiffy:encode(convert_list_to_ejson(List)),
 
 	{Data, Req, State}.
 
