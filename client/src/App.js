@@ -40,12 +40,12 @@ export default class App extends React.Component {
               Erlang Regression App            
            </Typography>
         </AppBar>
-	<Grid container xs={12} spacing={24444}>
+	<Grid container xs={12} justify="space-around" spacing={24}>
 	<Grid item xs={6}>
-	  <Typography variant="title" gutterBottom>
+	  <Typography variant="title">
           {regression}
           </Typography>
-          <Typography variant="subheading" gutterBottom>
+          <Typography variant="subheading">
 	  There are {count} points.
 	  </Typography>
          
@@ -89,7 +89,7 @@ export default class App extends React.Component {
 	</Grid>
         <Grid item xs={12}>
           <hr />
-	  <Typography align='center' gutterBottom>
+	  <Typography align='center'>
           Erlang/React example application by Gareth Webber. 
 	     Released under open source&nbsp; 
 	    <a href="https://raw.githubusercontent.com/garethwebber/erlregression/master/LICENSE">licence</a>.
