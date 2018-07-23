@@ -5,6 +5,57 @@ import {AppBar, Button, Grid, List, ListItem,
 import 'typeface-roboto';
 import './App.css';
 
+const Header = ({children}) =>
+	<AppBar position="static">
+           <Typography variant='display1' align='center' color="inherit">
+              {children} 
+           </Typography>
+        </AppBar>
+
+const Footer = ({}) =>
+          <Typography align='center'>
+          Erlang/React example application by Gareth Webber.
+             Released under open source&nbsp;
+            <a href="https://raw.githubusercontent.com/garethwebber/erlregression/master/LICENSE">licence</a>.
+            <br />
+            Swagger <a href="/api-docs">API documentation</a> for the
+            Elang provide REST interface.
+          </Typography>
+		
+const HeadSubHead = ({heading, subheading}) =>
+      <span>
+          <Typography variant="title">
+          {heading}
+          </Typography>
+          <Typography variant="subheading">
+          {subheading}
+          </Typography>
+      </span>
+
+const PaperListItem = ({x, y, secondaryAction}) =>
+	    <Paper>
+            <ListItem>
+            <ListItemText primary={'(' + x + ', ' + y + ')'} />
+           <ListItemSecondaryAction>
+                <IconButton aria-label="Delete">
+            <img width="16" height="16" alt="delete"
+                  id={'[{"point" : { "x" : ' + x + ', "y" : ' + y + '}}]'}
+                  src="/static/trash-can.png"
+                  onClick={secondaryAction}/>
+                </IconButton>
+              </ListItemSecondaryAction>
+            </ListItem>
+            </Paper>
+
+const NoPointsText = ({buttonAction}) =>
+  <span>
+  <Typography align='center' gutterBottom>
+    You need three or more points to run a regression. <br />Enter some
+     using form to the left, or load some dummy data.
+  </Typography>
+  <Button variant="raised" color="primary" onClick={buttonAction}>Load Dummy Data </Button>
+  </span>
+
 export default class App extends React.Component {
    state = {
                   points: [],
@@ -14,7 +65,7 @@ export default class App extends React.Component {
                   x: '',
                   y: '',        
   };
-  
+
   constructor(props) {
 	  super(props);
 	  this.loadDummyData = this.loadDummyData.bind(this);
@@ -35,70 +86,47 @@ export default class App extends React.Component {
     const graph = this.state.graph;
     return (
       <div className="App">
-        <AppBar position="static"> 
-	   <Typography variant='display1' align='center' color="inherit" gutterBottom>
-              Erlang Regression App            
-           </Typography>
-        </AppBar>
-	<Grid container xs={12} justify="space-around" spacing={24}>
+	<Header>Erlang Regression App</Header>
+	    
+	<Grid container xs={12} justify="space-around">
+	
+	{/* Left Hand Column */}
 	<Grid item xs={6}>
-	  <Typography variant="title">
-          {regression}
-          </Typography>
-          <Typography variant="subheading">
-	  There are {count} points.
-	  </Typography>
-         
+	  <HeadSubHead
+            heading={regression}
+	    subheading={"There are " + count + " points."} />
 	  <List>
           {points.map((point, index) => (
-            <Paper>
-            <ListItem key={index}>
-	    <ListItemText primary={'(' + point.point.x + ', ' +
-                                   point.point.y + ')'} />
-           <ListItemSecondaryAction>
-                <IconButton aria-label="Delete">
-            <img width="16" height="16" alt="delete"
-		  id={'[{"point" : { "x" : ' + point.point.x + ', "y" : ' + point.point.y + '}}]'}
-		  src="/static/trash-can.png"
-		  onClick={this.handleDelete}/>
-                </IconButton>
-              </ListItemSecondaryAction>
-            </ListItem>
-            </Paper>
+            <PaperListItem
+		  x={point.point.x}
+		  y={point.point.y}
+		  secondaryAction={this.handleDelete} />
           ))}
           </List>
-<form onSubmit={this.handleSubmit}>
-  <TextField name="x" label="X" value={this.state.x} onChange={this.handleChange} margin="normal"/>
-  <TextField name="y" label="Y" yalue={this.state.y} onChange={this.handleChange} margin="normal"/>
-  <Button variant="raised" color="primary" type="submit">Add Point</Button>
-</form>
+          <form onSubmit={this.handleSubmit}>
+            <TextField name="x" label="X" value={this.state.x} onChange={this.handleChange} margin="normal"/>
+            <TextField name="y" label="Y" yalue={this.state.y} onChange={this.handleChange} margin="normal"/>
+            <Button variant="raised" color="primary" type="submit">Add Point</Button>
+          </form>
           </Grid>
+	  {/* END Left Hand Column */}
+	  
+	  {/* Right Hand Column */}
 	  <Grid item xs={6}>
-          {count < 3
-	&& (
-<span>
-  <Typography align='center' gutterBottom>
-  You need three or more points to run a regression. <br />Enter some
-     using form to the left, or load some dummy data.
- </Typography> 
-  <Button variant="raised" color="primary" onClick={this.loadDummyData}>Load Dummy Data </Button>
-</span>
-	)
-	}
-          {count > 2 && <img class="reggraph" alt="regresssion graph" src={graph} />}
+          {count < 3 
+	     ? <NoPointsText buttonAction={this.loadDummyData} />
+             : <img class="reggraph" alt="regresssion graph" src={graph} />}
 	</Grid>
+	{/* END Right Hand Column */}
+
+	{/* Footer */}
         <Grid item xs={12}>
           <hr />
-	  <Typography align='center'>
-          Erlang/React example application by Gareth Webber. 
-	     Released under open source&nbsp; 
-	    <a href="https://raw.githubusercontent.com/garethwebber/erlregression/master/LICENSE">licence</a>.
-            <br />
-	    Swagger <a href="/api-docs">API documentation</a> for the
-	    Elang provide REST interface.
-          </Typography> 
-	  </Grid>
-	  </Grid>
+	  <Footer />
+        </Grid>
+	{/* END Footer */}
+      
+      </Grid>
       </div>
     );
   }
@@ -184,7 +212,7 @@ export default class App extends React.Component {
         "y": ` + this.state.y + `
       }
     }]`;
-    return await fetch('/rest/point', {
+    await fetch('/rest/point', {
       method: 'PUT',
       body: point,
       headers: {
@@ -194,6 +222,7 @@ export default class App extends React.Component {
       console.log(`error: ${err}`);
     });
     this.getRegression();
+    return true;
   }
 
   async loadDummyData() {
