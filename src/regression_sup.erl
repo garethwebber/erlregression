@@ -9,9 +9,9 @@ start_link() ->
 
 %% Child :: {Id,StartFunc,Restart,Shutdown,Type,Modules}
 init([]) ->
-    RegressionApp = {regression_app, {regression_app, start_link, []},
-		     permanent, 2000, worker, [regression_app]},
+    RegressionServer = {regression_server, {regression_server, start_link, []},
+		        permanent, brutal_kill, worker, [regression_server]},
 
-    Children = [RegressionApp],
+    Children = [RegressionServer],
     
-    {ok, {{one_for_all, 0, 1}, []}}.
+    {ok, {{one_for_one, 10000, 1}, Children}}.

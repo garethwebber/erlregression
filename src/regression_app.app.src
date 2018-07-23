@@ -1,6 +1,6 @@
 {application, regression_app,
  [{description, "Linear Regression Application"},
-  {vsn, "1"},
+  {vsn, "1.0.0"},
   {modules, [regression_app,regression_sup,regression_server,regression_db,regression_file,regression_math,
 	     regression_graph,regression_rest_point_handler,regression_rest_regression_handler,
 	     regression_rest_graph_handler]},

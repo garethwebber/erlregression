@@ -44,9 +44,11 @@ regression_server:debug().
 + Done. Create webservice endpoints that allows points to be added
 + Done. Build a one page app to send the points and receive the response
 + Done. Add ability to add points rather than just dummy data.
-11. Add ability to delete points.
-12. Improve graph with ticks and other labelling.
-13. Put main part of app into gen_server handler and set up supervisor.
++ Done. Put main part of app into gen_server handler and set up supervisor.
+13. Break client application into functional components.
+14. Improve graph with ticks and other labelling.
+15. Create client side graphing option
+16. Create ability to delete points.
 
 # Credits
 Delete can icon made by https://www.flaticon.com/authors/freepik

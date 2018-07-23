@@ -1,13 +1,13 @@
 -module(regression_server).
 -behaviour(gen_server).
--export([start/0]).
+-export([start_link/0]).
 -export([load_point/1, load_list/1, load_file/1,
 	get_points/0, run_regression/0, get_graph/0, debug/0]).
 -compile(export_all).
 -define(SERVER, ?MODULE).
 
-start() -> gen_server:start_link({local, ?SERVER}, ?MODULE, [], []).
-stop()  -> gen_server:call(?MODULE, stop).
+start_link() -> gen_server:start_link({local, ?SERVER}, ?MODULE, [], []).
+stop()       -> gen_server:call(?MODULE, stop).
 
 load_point(Point) -> gen_server:call(?MODULE, {loadpoint, Point}).
 load_list(List)  -> gen_server:call(?MODULE, {loadlist,  List}).

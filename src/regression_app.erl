@@ -3,10 +3,7 @@
 -export([start/2, stop/1]).
 
 start(_Type, _Args) ->
-    % Spin up the App Server
-    regression_server:start(),
-
-    % Spin up the Web Server
+    % Spin up REST endpoint handling web-server	
     Handlers = [
 		regression_rest_point_handler,
 		regression_rest_regression_handler,
@@ -37,8 +34,8 @@ start(_Type, _Args) ->
     }),
     io:format("Started REST API via Cowboy on port: ~w~n", [Port]),
 
-    io:format("Regression App servers running, now exiting. ~n", []),
-    {ok, self()}.
+    % Bring up supervisor: supervisor will start regression app-server.
+    regression_sup:start_link().
 
 stop(_State) ->
     ok.
