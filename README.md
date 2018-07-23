@@ -1,6 +1,10 @@
 # ErlRegression
 
-This is a test of my ability to learn erlang. It is a simple web app that you can give a series of points and get a linear regression performed. It is built with a react app talking to an Erlang provided REST interface. The application is built with rebar3 which will grab all the dependencies and compile everything. 
+This is a test of my ability to learn erlang. It is a simple web app that you 
+can give a series of points and get a linear regression performed. It is 
+built with a react app talking to an Erlang provided REST interface. The 
+application is built with rebar3 which will grab all the dependencies and 
+compile everything. 
 
 ## Playing
 
@@ -8,7 +12,10 @@ There are a three ways to play with the app: through the react front end, throug
 (talking to the OTP gen_server business logic implementation). 
 
 ### React App
-Start the application on the command line using `rebar3 shell`. You can then spin up a web-browser and point it at `http://localhost:8080`.
+Start the application on the command line using `rebar3 shell`. You can then 
+spin up a web-browser and point it at `http://localhost:8080`. Alternatively,
+the project can be pushed into `https://www.heroku.com` and will spin up 
+without any further work (as a single web dyno).
 
 ![alt text](https://raw.githubusercontent.com/garethwebber/erlregression/master/priv/v1_graph.png "Regression App")
 
