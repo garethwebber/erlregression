@@ -193,6 +193,7 @@ export default class App extends React.Component {
     }).then(res => res).catch((err) => {
       console.log(`error: ${err}`);
     });
+    this.getRegression();
   }
 
   async loadDummyData() {
