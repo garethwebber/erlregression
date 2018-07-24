@@ -1,60 +1,9 @@
 import React from 'react';
-import {AppBar, Button, Grid, List, ListItem, 
-	IconButton, ListItemText, ListItemSecondaryAction,
-	Paper, TextField, Typography} from '@material-ui/core';
+import {Grid, List} from '@material-ui/core';
+import {Footer, Header, HeadSubHead, PaperListItem, 
+	NoPointsText, PointCreationForm} from './components';
 import 'typeface-roboto';
 import './App.css';
-
-const Header = ({children}) =>
-	<AppBar position="static">
-           <Typography variant='display1' align='center' color="inherit">
-              {children} 
-           </Typography>
-        </AppBar>
-
-const Footer = ({}) =>
-          <Typography align='center'>
-          Erlang/React example application by Gareth Webber.
-             Released under open source&nbsp;
-            <a href="https://raw.githubusercontent.com/garethwebber/erlregression/master/LICENSE">licence</a>.
-            <br />
-            Swagger <a href="/api-docs">API documentation</a> for the
-            Elang provide REST interface.
-          </Typography>
-		
-const HeadSubHead = ({heading, subheading}) =>
-      <span>
-          <Typography variant="title">
-          {heading}
-          </Typography>
-          <Typography variant="subheading">
-          {subheading}
-          </Typography>
-      </span>
-
-const PaperListItem = ({x, y, secondaryAction}) =>
-	    <Paper>
-            <ListItem>
-            <ListItemText primary={'(' + x + ', ' + y + ')'} />
-           <ListItemSecondaryAction>
-                <IconButton aria-label="Delete">
-            <img width="16" height="16" alt="delete"
-                  id={'[{"point" : { "x" : ' + x + ', "y" : ' + y + '}}]'}
-                  src="/static/trash-can.png"
-                  onClick={secondaryAction}/>
-                </IconButton>
-              </ListItemSecondaryAction>
-            </ListItem>
-            </Paper>
-
-const NoPointsText = ({buttonAction}) =>
-  <span>
-  <Typography align='center' gutterBottom>
-    You need three or more points to run a regression. <br />Enter some
-     using form to the left, or load some dummy data.
-  </Typography>
-  <Button variant="raised" color="primary" onClick={buttonAction}>Load Dummy Data </Button>
-  </span>
 
 export default class App extends React.Component {
    state = {
@@ -62,16 +11,12 @@ export default class App extends React.Component {
                   regression: '',
                   count: 0,
                   graph: null,
-                  x: '',
-                  y: '',        
   };
 
   constructor(props) {
 	  super(props);
 	  this.loadDummyData = this.loadDummyData.bind(this);
 	  this.getRegression = this.getRegression.bind(this);
-	  this.handleSubmit = this.handleSubmit.bind(this);
-	  this.handleChange = this.handleChange.bind(this);
 	  this.handleDelete = this.handleDelete.bind(this);
   }
 
@@ -103,11 +48,7 @@ export default class App extends React.Component {
 		  secondaryAction={this.handleDelete} />
           ))}
           </List>
-          <form onSubmit={this.handleSubmit}>
-            <TextField name="x" label="X" value={this.state.x} onChange={this.handleChange} margin="normal"/>
-            <TextField name="y" label="Y" yalue={this.state.y} onChange={this.handleChange} margin="normal"/>
-            <Button variant="raised" color="primary" type="submit">Add Point</Button>
-          </form>
+	  <PointCreationForm refreshAction={this.getRegression} />
           </Grid>
 	  {/* END Left Hand Column */}
 	  
@@ -182,15 +123,6 @@ export default class App extends React.Component {
     return true;
   }
 
-  handleChange(event) {
-    const target = event.target.name;
-    const value = event.target.value;
-
-    this.setState({
-      [target]: value
-    });
-  }
-
   async handleDelete(event) {
     const point = event.target.id;
  
@@ -203,26 +135,6 @@ export default class App extends React.Component {
     }).then(res => res).catch((err) => {
       console.log(`error: ${err}`);
     });
-  }
-
-  async handleSubmit(event) {
-    const point = `[{
-      "point": {
-        "x": ` + this.state.x + `,
-        "y": ` + this.state.y + `
-      }
-    }]`;
-    await fetch('/rest/point', {
-      method: 'PUT',
-      body: point,
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    }).then(res => res).catch((err) => {
-      console.log(`error: ${err}`);
-    });
-    this.getRegression();
-    return true;
   }
 
   async loadDummyData() {
@@ -263,7 +175,7 @@ export default class App extends React.Component {
       "x": 2
     }
   }]`;
-    const ret1 = await fetch('/rest/point', {
+    await fetch('/rest/point', {
       method: 'PUT',
       body: dummy,
       headers: {
