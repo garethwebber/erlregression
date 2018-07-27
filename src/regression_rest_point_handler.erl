@@ -11,8 +11,8 @@ rest_init(Req, _Opts) ->
   {ok, Req, #{}}.
 
 trails() ->
-  Metadata =
-    #{get =>
+  Metadata = #{
+      get =>
       #{tags => ["Manage data"],
         description => "Gets all points in database",
         produces => ["application/json"]
@@ -21,9 +21,10 @@ trails() ->
       #{tags => ["Manage data"], 
         description => "Delete a point from the database",
         parameters => [
-	   #{name => <<"Point">>,
-           in => path,
-           required => true
+	   #{name => <<"point">>,
+           in => <<"path">>,
+           required => true,
+	   type=><<"string">>
 	    }
 	]
        },
@@ -51,7 +52,7 @@ trails() ->
         ]
       }
     },
-  [trails:trail("/rest/point",?MODULE, [], Metadata)].
+  [trails:trail("/rest/point[/:point]",?MODULE, [], Metadata)].
 
 content_types_accepted(Req, State) ->
     {[
@@ -68,7 +69,8 @@ allowed_methods(Req, State) ->
     {[<<"GET">>, <<"PUT">>, <<"DELETE">>], Req, State}.
 
 delete_resource(Req, State) ->
-    io:format("Delete resource called.~n", []),
+    Point = cowboy_req:binding(point, Req),
+    regression_server:delete_point(point), 
     {true, Req, State}.
 
 resource_exists(Req, _State) ->
