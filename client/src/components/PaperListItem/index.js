@@ -9,7 +9,7 @@ const PaperListItem = ({x, y, secondaryAction}) =>
            <ListItemSecondaryAction>
                 <IconButton aria-label="Delete">
             <img width="16" height="16" alt="delete"
-                  id={'[{"point" : { "x" : ' + x + ', "y" : ' + y + '}}]'}
+                  id={'{' + x + ',' + y + '}'}
                   src="/static/trash-can.png"
                   onClick={secondaryAction}/>
                 </IconButton>

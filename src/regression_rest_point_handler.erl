@@ -1,6 +1,6 @@
 -module(regression_rest_point_handler).
 -behaviour(trails_handler).
--export([init/2, rest_init/2, trails/0, allowed_methods/2,
+-export([init/2, rest_init/2, trails/0, allowed_methods/2,delete_resource/2,
 	 content_types_provided/2,content_types_accepted/2,resource_exists/2,
 	 getall/2, addpoint/2]).
 
@@ -17,6 +17,16 @@ trails() ->
         description => "Gets all points in database",
         produces => ["application/json"]
       },
+      delete =>
+      #{tags => ["Manage data"], 
+        description => "Delete a point from the database",
+        parameters => [
+	   #{name => <<"Point">>,
+           in => path,
+           required => true
+	    }
+	]
+       },
       put =>
       #{tags => ["Manage data"],
         description => "Add a point to the database",
@@ -55,7 +65,11 @@ content_types_provided(Req, State) ->
      ], Req, State}.
 
 allowed_methods(Req, State) ->
-    {[<<"GET">>, <<"PUT">>], Req, State}.
+    {[<<"GET">>, <<"PUT">>, <<"DELETE">>], Req, State}.
+
+delete_resource(Req, State) ->
+    io:format("Delete resource called.~n", []),
+    {true, Req, State}.
 
 resource_exists(Req, _State) ->
 	{true, Req, index}.

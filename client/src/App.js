@@ -126,9 +126,8 @@ export default class App extends React.Component {
   async handleDelete(event) {
     const point = event.target.id;
  
-    return await fetch('/rest/point', {
+    return await fetch('/rest/point/' + point, {
       method: 'DELETE',
-      body: point,
       headers: {
         'Content-Type': 'application/json',
       },
