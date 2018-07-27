@@ -1,5 +1,6 @@
 -module(regression_db).
--export([start/0, insert_point/2, insert_list/2, get_all/1, debug/1]).
+-export([start/0, insert_point/2, insert_list/2, get_all/1, 
+	 delete_point/2, debug/1]).
 
 start() ->
 	ets:new(regression_app, [duplicate_bag, named_table, public]).
@@ -20,7 +21,7 @@ get_all(DB) ->
 	ets:tab2list(DB).
 
 delete_point(DB, Point) ->
-	ets:delete_object(DB, Point ).
+	ets:delete_object(DB, Point).
 
 debug(DB) ->
 	"Database contains: ~n~n" ++  debug_h(DB, get_all(DB)).

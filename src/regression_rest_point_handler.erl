@@ -69,8 +69,11 @@ allowed_methods(Req, State) ->
     {[<<"GET">>, <<"PUT">>, <<"DELETE">>], Req, State}.
 
 delete_resource(Req, State) ->
-    Point = cowboy_req:binding(point, Req),
-    regression_server:delete_point(point), 
+    Text = cowboy_req:binding(point, Req),
+    List = [list_to_integer(I) || I <- string:tokens(binary_to_list(Text), ",")],
+    [X, Y] = List,
+    Point = {point, X, Y},
+    regression_server:delete_point(Point),
     {true, Req, State}.
 
 resource_exists(Req, _State) ->
