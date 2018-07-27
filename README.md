@@ -1,6 +1,6 @@
 # ErlRegression
 
-This is a test of my ability to learn erlang. It is a simple web app that you 
+This is a test of my ability to learn Erlang. It is a simple web-app that you 
 can give a series of points and get a linear regression performed. It is 
 built with a react app talking to an Erlang provided REST interface. The 
 application is built with rebar3 which will grab all the dependencies and 
@@ -8,8 +8,9 @@ compile everything.
 
 ## Playing
 
-There are a three ways to play with the app: through the react front end, through swagger, or via the erlang shell 
-(talking to the OTP gen_server business logic implementation). 
+There are a three ways to play with the app: through the react front end, 
+through swagger, or via the erlang shell (talking to the OTP gen_server 
+business logic implementation). 
 
 ### React App
 Start the application on the command line using `rebar3 shell`. You can then 
@@ -34,6 +35,17 @@ regression_server:run_regression().
 
 regression_server:debug().
 ```
+## Architecture
+
+The architecture is best described in three parts: a react client-side
+application, a set of rest endpoints served using cowboy and an OTP
+gen_server based erlang application. The component diagram below details
+the assembly. 
+
+The react app is built under /client. The deployable version lives under
+/priv/static. The Erlang code all lives under /src.
+
+![alt text](https://raw.githubusercontent.com/garethwebber/erlregression/master/priv/architecture-diagram.png "Architecture of App")
 
 ## Journey
 
@@ -49,7 +61,7 @@ regression_server:debug().
 + Done. Build a one page app to send the points and receive the response
 + Done. Add ability to add points rather than just dummy data.
 + Done. Put main part of app into gen_server handler and set up supervisor.
-13. Break client application into functional components.
++ Done. Break client application into functional components.
 14. Improve graph with ticks and other labelling.
 15. Create client side graphing option
 16. Create ability to delete points.
