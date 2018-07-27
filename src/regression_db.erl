@@ -19,6 +19,9 @@ insert_list(DB, List) ->
 get_all(DB) ->
 	ets:tab2list(DB).
 
+delete_point(DB, Point) ->
+	return ets:delete_object(DB, Point);
+
 debug(DB) ->
 	"Database contains: ~n~n" ++  debug_h(DB, get_all(DB)).
 

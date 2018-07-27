@@ -10,6 +10,7 @@ start_link() -> gen_server:start_link({local, ?SERVER}, ?MODULE, [], []).
 stop()       -> gen_server:call(?MODULE, stop).
 
 load_point(Point) -> gen_server:call(?MODULE, {loadpoint, Point}).
+delete_point(Point) -> gen_server:call(?MODULE, {deletepoint, Point}).
 load_list(List)  -> gen_server:call(?MODULE, {loadlist,  List}).
 load_file(File)   -> gen_server:call(?MODULE, {loadfile,  File}).
 get_points()      -> gen_server:call(?MODULE, {getPoints}).
@@ -27,6 +28,10 @@ init([]) ->
 handle_call({loadpoint, Point}, _From, Tab) ->
         regression_db:insert_point(Tab, Point),
 	{reply, ok, Tab};
+
+handle_call({deletepoint, Point}, _From, Tab) ->
+        regression_db:delete_point(Tab, Point),
+        {reply, ok, Tab};
 
 handle_call({loadlist, List}, _From, Tab) ->
         regression_db:insert_list(Tab, List),
