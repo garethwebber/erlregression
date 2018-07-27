@@ -124,9 +124,8 @@ export default class App extends React.Component {
   }
 
   async handleDelete(event) {
-    const point = event.target.id;
- 
-    return await fetch('/rest/point/' + point, {
+    const url = '/rest/point/' + event.target.id;
+    await fetch(url, {
       method: 'DELETE',
       headers: {
         'Content-Type': 'application/json',
@@ -134,6 +133,7 @@ export default class App extends React.Component {
     }).then(res => res).catch((err) => {
       console.log(`error: ${err}`);
     });
+    this.getRegression();
   }
 
   async loadDummyData() {

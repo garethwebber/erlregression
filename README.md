@@ -62,9 +62,10 @@ The react app is built under /client. The deployable version lives under
 + Done. Add ability to add points rather than just dummy data.
 + Done. Put main part of app into gen_server handler and set up supervisor.
 + Done. Break client application into functional components.
-14. Improve graph with ticks and other labelling.
-15. Create client side graphing option
-16. Create ability to delete points.
++ Done. Create ability to delete points.
+15. Improve graph with ticks and other labelling.
+16. Work out why buttons sometimes don't react (move to Axios?)
+17. Create client side graphing option
 
 # Credits
 Delete can icon made by https://www.flaticon.com/authors/freepik
