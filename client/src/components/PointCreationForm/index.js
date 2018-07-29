@@ -1,4 +1,5 @@
 import React from 'react';
+import axios from 'axios';
 import {Button, TextField} from '@material-ui/core';
 
 export default class PointCreationForm extends React.Component {
@@ -45,13 +46,8 @@ export default class PointCreationForm extends React.Component {
         "y": ` + this.state.y + `
       }
     }]`;
-    await fetch('/rest/point', {
-      method: 'PUT',
-      body: point,
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    }).then(res => res).catch((err) => {
+    await axios.put('/rest/point', point) 
+      .then(res => res).catch((err) => {
       console.log(`error: ${err}`);
     });
     refreshAction(); 

@@ -2,6 +2,7 @@ import React from 'react';
 import {Grid, List} from '@material-ui/core';
 import {Footer, Header, HeadSubHead, PaperListItem, 
 	NoPointsText, PointCreationForm} from './components';
+import axios from 'axios';
 import 'typeface-roboto';
 import './App.css';
 
@@ -77,14 +78,10 @@ export default class App extends React.Component {
    var newState = Object.assign({}, this.state);
 
     // Get Points from the database
-    await fetch('/rest/point', {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    }).then(res => res.json()).then((data) => {
-      newState.points = data;
-      newState.count = Object.keys(data).length;
+    await axios('/rest/point')
+      .then(res => {
+      newState.points = res.data;
+      newState.count = Object.keys(newState.points).length;
       console.log(`Loaded ${newState.count} points`);
     }).catch((err) => {
       console.log(`error fetching points: ${err}`);
@@ -92,14 +89,10 @@ export default class App extends React.Component {
 
     // If there are more than two points run the regression
     if (newState.count > 2) {
-      await fetch('/rest/regression', {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      }).then(res => res.json()).then((data) => {
-	const B = data.regression.B.toFixed(2);
-	const A = data.regression.A.toFixed(2);
+      await axios('/rest/regression')
+        .then(res => {
+	const B = res.data.regression.B.toFixed(2);
+	const A = res.data.regression.A.toFixed(2);
         
 	console.log('Y = ' + B + 'x + ' + A + '.');
 	newState.regression = 'Y = ' + B + 'x + ' + A + '.';
@@ -108,15 +101,16 @@ export default class App extends React.Component {
       });
 
       // Get the graph and create a URL for it
-      await fetch('/rest/graph', {
-        method: 'GET',
-      }).then(res => res.blob()).then((graphblob) => {
-        const objectURL = URL.createObjectURL(graphblob);
+      await axios('/rest/graph', {responseType: 'blob'})
+        .then(res => {
+        const objectURL = URL.createObjectURL(res.data);
         newState.graph = objectURL;
         console.log(`Got graph: ${objectURL}bytes.`);
       }).catch((err) => {
         console.log(`error getting graph: ${err}`);
       });
+    } else {
+      newState.regression = "";
     }
 
     this.setState(newState);
@@ -125,12 +119,8 @@ export default class App extends React.Component {
 
   async handleDelete(event) {
     const url = '/rest/point/' + event.target.id;
-    await fetch(url, {
-      method: 'DELETE',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    }).then(res => res).catch((err) => {
+    await axios.delete(url)
+      .then(res => res).catch((err) => {
       console.log(`error: ${err}`);
     });
     this.getRegression();
@@ -174,13 +164,8 @@ export default class App extends React.Component {
       "x": 2
     }
   }]`;
-    await fetch('/rest/point', {
-      method: 'PUT',
-      body: dummy,
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    }).then(res => res).catch((err) => {
+    await axios.put('/rest/point', dummy)	  
+      .then(res => res).catch((err) => {
       console.log(`error: ${err}`);
     });
     this.getRegression();
