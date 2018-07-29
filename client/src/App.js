@@ -22,6 +22,7 @@ export default class App extends React.Component {
   }
 
   componentDidMount() {
+    document.title = "Erlang Regression App";
     this.getRegression();
   }
 
@@ -34,7 +35,7 @@ export default class App extends React.Component {
       <div className="App">
 	<Header>Erlang Regression App</Header>
 	    
-	<Grid container xs={12} justify="space-around">
+	<Grid container xs={12} spacing={24} style={{ paddingTop: 24}}>
 	
 	{/* Left Hand Column */}
 	<Grid item xs={6}>
