@@ -1,24 +1,24 @@
 import React from 'react';
 import {Grid, List} from '@material-ui/core';
 import {Footer, Header, HeadSubHead, PaperListItem, 
-	NoPointsText, PointCreationForm} from './components';
+       NoPointsText, PointCreationForm} from './components';
 import axios from 'axios';
 import 'typeface-roboto';
 import './App.css';
 
 export default class App extends React.Component {
    state = {
-                  points: [],
-                  regression: '',
-                  count: 0,
-                  graph: null,
+     points: [],
+     regression: '',
+     count: 0,
+     graph: null,
   };
 
   constructor(props) {
-	  super(props);
-	  this.loadDummyData = this.loadDummyData.bind(this);
-	  this.getRegression = this.getRegression.bind(this);
-	  this.handleDelete = this.handleDelete.bind(this);
+    super(props);
+    this.loadDummyData = this.loadDummyData.bind(this);
+    this.getRegression = this.getRegression.bind(this);
+    this.handleDelete = this.handleDelete.bind(this);
   }
 
   componentDidMount() {
@@ -33,41 +33,41 @@ export default class App extends React.Component {
     const graph = this.state.graph;
     return (
       <div className="App">
-	<Header>Erlang Regression App</Header>
-	    
-	<Grid container xs={12} spacing={24} style={{ paddingTop: 24}}>
-	
-	{/* Left Hand Column */}
-	<Grid item xs={6}>
-	  <HeadSubHead
+      <Header>Erlang Regression App</Header>
+      
+      <Grid container xs={12} spacing={24} style={{ paddingTop: 24}}>
+  
+      {/* Left Hand Column */}
+      <Grid item xs={6}>
+        <HeadSubHead
             heading={regression}
-	    subheading={"There are " + count + " points."} />
-	  <List>
+            subheading={"There are " + count + " points."} />
+        <List>
           {points.map((point, index) => (
             <PaperListItem
-		  x={point.point.x}
-		  y={point.point.y}
-		  secondaryAction={this.handleDelete} />
+               x={point.point.x}
+               y={point.point.y}
+               secondaryAction={this.handleDelete} />
           ))}
-          </List>
-	  <PointCreationForm refreshAction={this.getRegression} />
-          </Grid>
-	  {/* END Left Hand Column */}
-	  
-	  {/* Right Hand Column */}
-	  <Grid item xs={6}>
+        </List>
+        <PointCreationForm refreshAction={this.getRegression} />
+      </Grid>
+      {/* END Left Hand Column */}
+    
+      {/* Right Hand Column */}
+      <Grid item xs={6}>
           {count < 3 
-	     ? <NoPointsText buttonAction={this.loadDummyData} />
-             : <img class="reggraph" alt="regresssion graph" src={graph} />}
-	</Grid>
-	{/* END Right Hand Column */}
+            ? <NoPointsText buttonAction={this.loadDummyData} />
+            : <img class="reggraph" alt="regresssion graph" src={graph} />}
+      </Grid>
+      {/* END Right Hand Column */}
 
-	{/* Footer */}
-        <Grid item xs={12}>
-          <hr />
-	  <Footer />
-        </Grid>
-	{/* END Footer */}
+      {/* Footer */}
+      <Grid item xs={12}>
+        <hr />
+        <Footer />
+      </Grid>
+      {/* END Footer */}
       
       </Grid>
       </div>
@@ -92,11 +92,11 @@ export default class App extends React.Component {
     if (newState.count > 2) {
       await axios('/rest/regression')
         .then(res => {
-	const B = res.data.regression.B.toFixed(2);
-	const A = res.data.regression.A.toFixed(2);
+        const B = res.data.regression.B.toFixed(2);
+        const A = res.data.regression.A.toFixed(2);
         
-	console.log('Y = ' + B + 'x + ' + A + '.');
-	newState.regression = 'Y = ' + B + 'x + ' + A + '.';
+        console.log('Y = ' + B + 'x + ' + A + '.');
+        newState.regression = 'Y = ' + B + 'x + ' + A + '.';
       }).catch((err) => {
         console.log(`error getting regression: ${err}`);
       });
@@ -165,7 +165,7 @@ export default class App extends React.Component {
       "x": 2
     }
   }]`;
-    await axios.put('/rest/point', dummy)	  
+    await axios.put('/rest/point', dummy)   
       .then(res => res).catch((err) => {
       console.log(`error: ${err}`);
     });
