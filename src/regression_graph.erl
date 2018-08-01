@@ -4,6 +4,7 @@
 create_graph(Points, A, B) ->
   Bin = create_graph_binary(Points, A, B),
   egd:save(Bin, "output.png"),
+  egd:destroy(Bin),
   io:format("Graph created~n", []).
 
 create_graph_binary(Points, A, B) ->
@@ -17,7 +18,9 @@ create_graph_binary(Points, A, B) ->
   lists:foreach(fun(H) -> plot_point(Im, Size, Margin, MaxMin, H) end, Points),
   plot_line(Im, Size, Margin, MaxMin, A, B),
 
-  egd:render(Im).
+  ImageData = egd:render(Im),
+  egd:destroy(Im),
+  ImageData.
 
 draw_axes(Image, Size, Margin, MaxMin) ->
   Black = egd:color({0,0,0}),
