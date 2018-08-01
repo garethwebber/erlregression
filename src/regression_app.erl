@@ -15,6 +15,8 @@ start(_Type, _Args) ->
 		       {priv_dir, regression_app, "static"}},
                {"/favicon.ico", cowboy_static,
                        {priv_file, regression_app, "static/favicon.ico"}},
+         {"/about", cowboy_static,
+           {priv_file, regression_app, "static/index.html"}},
 	       {"/", cowboy_static, 
 		       {priv_file, regression_app, "static/index.html"}}
 	       | trails:trails(Handlers)

@@ -1,10 +1,9 @@
 import React from 'react';
 import {Grid, List} from '@material-ui/core';
-import {Footer, Header, HeadSubHead, PaperListItem, 
+import {HeadSubHead, PaperListItem, 
        NoPointsText, PointCreationForm} from './components';
 import axios from 'axios';
 import 'typeface-roboto';
-import './App.css';
 
 export default class App extends React.Component {
    state = {
@@ -22,7 +21,6 @@ export default class App extends React.Component {
   }
 
   componentDidMount() {
-    document.title = "Erlang Regression App";
     this.getRegression();
   }
 
@@ -32,11 +30,7 @@ export default class App extends React.Component {
     const regression = this.state.regression;
     const graph = this.state.graph;
     return (
-      <div className="App">
-      <Header>Erlang Regression App</Header>
-      
       <Grid container xs={12} spacing={24} style={{ paddingTop: 24}}>
-  
       {/* Left Hand Column */}
       <Grid item xs={6}>
         <HeadSubHead
@@ -61,16 +55,7 @@ export default class App extends React.Component {
             : <img class="reggraph" alt="regresssion graph" src={graph} />}
       </Grid>
       {/* END Right Hand Column */}
-
-      {/* Footer */}
-      <Grid item xs={12}>
-        <hr />
-        <Footer />
       </Grid>
-      {/* END Footer */}
-      
-      </Grid>
-      </div>
     );
   }
 
