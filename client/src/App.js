@@ -103,15 +103,15 @@ export default class App extends React.Component {
     return true;
   }
 
-  async handleDelete(event) {
-    const url = '/rest/point/' + event.target.id;
+  async handleDelete(event, id) {
+    const url = '/rest/point/' + id;
     await axios.delete(url)
       .then(res => res).catch((err) => {
       console.log(`error: ${err}`);
     });
     this.getRegression();
   }
-
+  
   async loadDummyData() {
     const dummy = `[
   {

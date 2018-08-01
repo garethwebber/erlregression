@@ -1,20 +1,18 @@
 import React from 'react';
 import {ListItem, IconButton, ListItemText, 
-	ListItemSecondaryAction, Paper} from '@material-ui/core';
+	      ListItemSecondaryAction, Paper} from '@material-ui/core';
+import DeleteIcon from '@material-ui/icons/Delete';
 
 const PaperListItem = ({x, y, secondaryAction}) =>
-            <Paper>
-            <ListItem>
+        <Paper>
+          <ListItem>
             <ListItemText primary={'(' + x + ', ' + y + ')'} />
-           <ListItemSecondaryAction>
-                <IconButton aria-label="Delete">
-            <img width="16" height="16" alt="delete"
-                  id={x + ',' + y}
-                  src="/static/trash-can.png"
-                  onClick={secondaryAction}/>
+            <ListItemSecondaryAction>
+                <IconButton aria-label="Delete" onClick={(e) => secondaryAction(e, (x + ',' + y))}>
+                  <DeleteIcon />
                 </IconButton>
-              </ListItemSecondaryAction>
-            </ListItem>
-            </Paper>
+            </ListItemSecondaryAction>
+         </ListItem>
+        </Paper>
 
 export default PaperListItem;

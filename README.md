@@ -65,6 +65,3 @@ The react app is built under /client. The deployable version lives under
 + Done. Create ability to delete points.
 15. Improve graph with ticks and other labelling.
 16. Create client side graphing option
-
-# Credits
-Delete can icon made by https://www.flaticon.com/authors/freepik

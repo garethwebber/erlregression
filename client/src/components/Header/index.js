@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import {Link} from 'react-router-dom';
 import {AppBar, IconButton, Menu, MenuItem, Toolbar, Typography} from '@material-ui/core';
 import MenuIcon from '@material-ui/icons/Menu';
 
@@ -24,7 +24,7 @@ class Header extends React.Component {
     return(
         <AppBar style={{ marginLeft:-12, marginRight: 20}} position="static">
           <Toolbar>
-            <IconButton colour="inherit" aria-label="Menu" onClick={this.handleMenu}>
+            <IconButton color="inherit" aria-label="Menu" onClick={this.handleMenu}>
               <MenuIcon />
             </IconButton>
             <Menu
