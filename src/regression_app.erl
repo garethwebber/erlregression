@@ -3,24 +3,21 @@
 -export([start/2, stop/1]).
 
 start(_Type, _Args) ->
-    % Spin up REST endpoint handling web-server	
+    % Spin up REST endpoint handling web-server 
     Handlers = [
-		regression_rest_point_handler,
-		regression_rest_regression_handler,
-		regression_rest_graph_handler,
-		cowboy_swagger_handler
-	       ],
+    regression_rest_point_handler,
+    regression_rest_regression_handler,
+    regression_rest_graph_handler,
+    cowboy_swagger_handler
+         ],
     Trails = [ 
- 	       {"/static/[...]", cowboy_static, 
-		       {priv_dir, regression_app, "static"}},
-               {"/favicon.ico", cowboy_static,
-                       {priv_file, regression_app, "static/favicon.ico"}},
-         {"/about", cowboy_static,
-           {priv_file, regression_app, "static/index.html"}},
-	       {"/", cowboy_static, 
-		       {priv_file, regression_app, "static/index.html"}}
-	       | trails:trails(Handlers)
-	],
+         {"/static/[...]", cowboy_static, {priv_dir, regression_app, "static"}},
+         {"/favicon.ico", cowboy_static,  {priv_file, regression_app, "static/favicon.ico"}},
+         {"/architecture-diagram.png", cowboy_static, {priv_file, regression_app, "architecture-diagram.png"}},
+         {"/about", cowboy_static,        {priv_file, regression_app, "static/index.html"}},
+         {"/", cowboy_static,             {priv_file, regression_app, "static/index.html"}}
+         | trails:trails(Handlers)
+  ],
     trails:store(Trails),
 
     case os:getenv("PORT") of
