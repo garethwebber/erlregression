@@ -32,7 +32,43 @@ draw_axes(Image, Size, Margin, MaxMin) ->
   egd:line(Image, translate_point(MaxMin, Size, Margin, {point, 0, MinY}),
                   translate_point(MaxMin, Size, Margin, {point, 0, MaxY}),
                   Black),
+  draw_ticks(Image, Size, Margin, MaxMin),
   Image.
+
+draw_ticks(Image, Size, Margin, MaxMin) ->
+  Ticks = 10,
+
+  {MinX, MinY, MaxX, MaxY} = MaxMin,
+  TicksX = (MaxX - MinX) / Ticks,
+  TicksY = (MaxY - MinY) / Ticks,
+
+  plot_tick_x(MinX, TicksX, Image, Size, Margin, MaxMin, Ticks + 1),
+  plot_tick_y(MinY, TicksY, Image, Size, Margin, MaxMin, Ticks + 1),
+  Image.
+
+plot_tick_x(_Start, _Gap, Image, _Size, _Margin, _MaxMin, 0) ->
+  Image;
+
+plot_tick_x(Start, Gap, Image, Size, Margin, MaxMin, Count) ->
+  Black = egd:color({0,0,0}),
+  Point = {point, Start, 0},
+
+  {CentreX, CentreY} = translate_point(MaxMin, Size, Margin, Point),
+  egd:line(Image, {CentreX, CentreY}, {CentreX, CentreY + 5}, Black),
+
+  plot_tick_x(Start + Gap, Gap, Image, Size, Margin, MaxMin, Count -1).
+
+plot_tick_y(_Start, _Gap, Image, _Size, _Margin, _MaxMin, 0) ->
+  Image;
+
+plot_tick_y(Start, Gap, Image, Size, Margin, MaxMin, Count) ->
+  Black = egd:color({0,0,0}),
+  Point = {point, 0, Start},
+
+  {CentreX, CentreY} = translate_point(MaxMin, Size, Margin, Point),
+  egd:line(Image, {CentreX, CentreY}, {CentreX - 5, CentreY}, Black),
+
+  plot_tick_y(Start + Gap, Gap, Image, Size, Margin, MaxMin, Count -1).
 
 plot_point(Image, Size, Margin, MaxMin, Point) ->
   Blue = egd:color({0,0,255}),
@@ -48,7 +84,7 @@ plot_line(Image, Size, Margin, MaxMin, A, B) ->
   	{MinX, _, MaxX, _} = MaxMin,
 
 	Left =  {point, MinX, A + (B * MinX)},
-        Right =	{point, MaxX, A + (B * MaxX)},
+  Right =	{point, MaxX, A + (B * MaxX)},
 
 	egd:line(Image, translate_point(MaxMin, Size, Margin, Left),
 		        translate_point(MaxMin, Size, Margin, Right), Red),
