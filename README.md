@@ -63,5 +63,5 @@ The react app is built under /client. The deployable version lives under
 + Done. Put main part of app into gen_server handler and set up supervisor.
 + Done. Break client application into functional components.
 + Done. Create ability to delete points.
-15. Improve graph with ticks and other labelling.
++ Improve graph with ticks and other labelling.
 16. Create client side graphing option

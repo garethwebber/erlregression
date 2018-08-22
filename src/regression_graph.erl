@@ -42,33 +42,44 @@ draw_ticks(Image, Size, Margin, MaxMin) ->
   TicksX = (MaxX - MinX) / Ticks,
   TicksY = (MaxY - MinY) / Ticks,
 
-  plot_tick_x(MinX, TicksX, Image, Size, Margin, MaxMin, Ticks + 1),
-  plot_tick_y(MinY, TicksY, Image, Size, Margin, MaxMin, Ticks + 1),
+  Font = egd_font:load("priv/6x11_latin1.wingsfont"),
+  plot_tick_x(Font, MinX, TicksX, Image, Size, Margin, MaxMin, Ticks + 1),
+  plot_tick_y(Font, MinY, TicksY, Image, Size, Margin, MaxMin, Ticks + 1),
   Image.
 
-plot_tick_x(_Start, _Gap, Image, _Size, _Margin, _MaxMin, 0) ->
+plot_tick_x(_Font, _Start, _Gap, Image, _Size, _Margin, _MaxMin, 0) ->
   Image;
 
-plot_tick_x(Start, Gap, Image, Size, Margin, MaxMin, Count) ->
+plot_tick_x(Font, Start, Gap, Image, Size, Margin, MaxMin, Count) ->
   Black = egd:color({0,0,0}),
   Point = {point, Start, 0},
 
   {CentreX, CentreY} = translate_point(MaxMin, Size, Margin, Point),
   egd:line(Image, {CentreX, CentreY}, {CentreX, CentreY + 5}, Black),
+  egd:text(Image, {CentreX - 10, CentreY + 10}, Font, 
+             number_to_string(Start), Black),
+  plot_tick_x(Font, Start + Gap, Gap, Image, Size, Margin, MaxMin, Count -1).
 
-  plot_tick_x(Start + Gap, Gap, Image, Size, Margin, MaxMin, Count -1).
-
-plot_tick_y(_Start, _Gap, Image, _Size, _Margin, _MaxMin, 0) ->
+plot_tick_y(_Font, _Start, _Gap, Image, _Size, _Margin, _MaxMin, 0) ->
   Image;
 
-plot_tick_y(Start, Gap, Image, Size, Margin, MaxMin, Count) ->
+plot_tick_y(Font, Start, Gap, Image, Size, Margin, MaxMin, Count) ->
   Black = egd:color({0,0,0}),
   Point = {point, 0, Start},
 
   {CentreX, CentreY} = translate_point(MaxMin, Size, Margin, Point),
   egd:line(Image, {CentreX, CentreY}, {CentreX - 5, CentreY}, Black),
+  egd:text(Image, {CentreX - 30, CentreY -10}, Font,
+             number_to_string(Start), Black),
+  plot_tick_y(Font, Start + Gap, Gap, Image, Size, Margin, MaxMin, Count -1).
 
-  plot_tick_y(Start + Gap, Gap, Image, Size, Margin, MaxMin, Count -1).
+number_to_string(Number) ->
+  % This is an evil function
+  try float_to_list(Number, [{decimals, 1}]) of 
+    _   -> float_to_list(Number, [{decimals, 1}]) 
+  catch
+    _:_ -> integer_to_list(Number) 
+  end.
 
 plot_point(Image, Size, Margin, MaxMin, Point) ->
   Blue = egd:color({0,0,255}),
