@@ -42,7 +42,7 @@ draw_ticks(Image, Size, Margin, MaxMin) ->
   TicksX = (MaxX - MinX) / Ticks,
   TicksY = (MaxY - MinY) / Ticks,
 
-  case code:priv_dir(my_application) of
+  case code:priv_dir(regression_app) of
         {error, bad_name} ->
             PrivDir = "priv";
         PrivDir ->
