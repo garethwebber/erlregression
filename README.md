@@ -46,22 +46,3 @@ The react app is built under /client. The deployable version lives under
 /priv/static. The Erlang code all lives under /src.
 
 ![alt text](https://raw.githubusercontent.com/garethwebber/erlregression/master/priv/architecture-diagram.png "Architecture of App")
-
-## Journey
-
-+ Done. Get a working erlang build system using a simple factorial app
-+ Done. Read a file of points, one point per line, comma seperated to load
-+ Done. Perform a regression and output the details 
-+ Done. Produce a PNG graph of the points and the line
-+ Done. Use ETS to store points in DB, taking initial load from file. 
-+ Done. Create three new message types: Add single point to DB; add multiple points to DB and add points from file to DB (stopping initial load).  
-+ Done. Get cowboy webserver running serving static content
-+ Done. Create a webservice endpoint that runs regression and returns graph
-+ Done. Create webservice endpoints that allows points to be added
-+ Done. Build a one page app to send the points and receive the response
-+ Done. Add ability to add points rather than just dummy data.
-+ Done. Put main part of app into gen_server handler and set up supervisor.
-+ Done. Break client application into functional components.
-+ Done. Create ability to delete points.
-+ Improve graph with ticks and other labelling.
-16. Create client side graphing option
