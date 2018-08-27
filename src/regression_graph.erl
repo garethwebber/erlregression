@@ -42,7 +42,14 @@ draw_ticks(Image, Size, Margin, MaxMin) ->
   TicksX = (MaxX - MinX) / Ticks,
   TicksY = (MaxY - MinY) / Ticks,
 
-  Font = egd_font:load("priv/6x11_latin1.wingsfont"),
+  case code:priv_dir(my_application) of
+        {error, bad_name} ->
+            PrivDir = "priv";
+        PrivDir ->
+            ok
+  end,
+  Font = egd_font:load(filename:join([PrivDir, "6x11_latin1.wingsfont"])),
+
   plot_tick_x(Font, MinX, TicksX, Image, Size, Margin, MaxMin, Ticks + 1),
   plot_tick_y(Font, MinY, TicksY, Image, Size, Margin, MaxMin, Ticks + 1),
   Image.
